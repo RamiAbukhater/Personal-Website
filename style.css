@@ -1,0 +1,385 @@
+html {
+  color-scheme: light dark;
+  background-color: canvas;
+  color: canvastext;
+}
+
+body {
+  font: 100%/1.5 system-ui;
+  margin: 0;
+  padding-bottom: 2rem;
+}
+
+/* Page content sits in a centred column; the header spans the full width */
+body > :not(.site-header, canvas) {
+  max-width: 56rem; /* rem, so headings line up with body text */
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+/* --- Site header: name on the left, page links on the right --- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 0.75rem 2rem;
+  margin-bottom: 1.5rem;
+  background-color: canvas;
+  border-bottom: 1px solid color-mix(in srgb, canvastext 15%, canvas);
+}
+
+.brand {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: inherit;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+nav a {
+  position: relative;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: color-mix(in srgb, canvastext 75%, canvas);
+  transition: color 0.15s, background-color 0.15s;
+}
+
+nav a:hover {
+  color: canvastext;
+  background-color: color-mix(in srgb, canvastext 8%, canvas);
+}
+
+nav a:focus-visible {
+  outline: 2px solid #00b894;
+  outline-offset: 2px;
+}
+
+/* The page you are on gets an accent underline */
+nav a[aria-current="page"] {
+  color: canvastext;
+}
+
+nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0.85rem 0.2rem;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #00b894;
+}
+
+/* The GitHub link is set apart as an outlined button */
+nav a[href*="github.com"] {
+  margin-left: 0.5rem;
+  border: 1px solid color-mix(in srgb, canvastext 30%, canvas);
+}
+
+nav a[href*="github.com"]:hover {
+  border-color: #00b894;
+}
+
+/* --- Buttons used in page content --- */
+
+.button {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid #00b894;
+  border-radius: 0.375rem;
+  background-color: #00b894;
+  font-weight: 600;
+  text-decoration: none;
+  color: #06231d;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.button:hover {
+  border-color: #00d9a8;
+  background-color: #00d9a8;
+}
+
+.button.secondary {
+  background-color: transparent;
+  color: inherit;
+}
+
+.button.secondary:hover {
+  background-color: rgb(0 184 148 / 15%);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+  max-width: 40rem;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+/* --- Home page: the brain animation fills the window behind the hero --- */
+
+html:has(.home) {
+  color-scheme: dark;
+  background-color: #0e1117;
+}
+
+body.home {
+  padding-bottom: 0;
+}
+
+.home canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.home .site-header {
+  margin-bottom: 0;
+  background-color: rgb(14 17 23 / 85%);
+  border-bottom-color: #232a33;
+}
+
+/* Home page sections span the full width and manage their own layout */
+body.home > section {
+  max-width: none;
+  margin: 0;
+  padding-inline: 0;
+}
+
+/* Hero: text keeps to the left; the brain has the right half */
+body.home > .hero {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - 4.25rem);
+  padding-inline: 2rem;
+}
+
+.hero > div {
+  max-width: 42vw;
+  margin-block: auto;
+}
+
+.home h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #e6edf3;
+  text-shadow: 0 0 1.5rem rgb(0 255 204 / 35%);
+}
+
+.home .tagline {
+  margin: 0.75rem 0 0;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #00ffcc;
+}
+
+.home .bio {
+  margin-top: 1.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid #00ffcc;
+  font-size: 1.1rem;
+  color: #9aa7b4;
+}
+
+.scroll-cue {
+  align-self: flex-start;
+  margin-bottom: 2rem;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #9aa7b4;
+}
+
+.scroll-cue:hover {
+  color: #00ffcc;
+}
+
+/* Sections below the hero sit on a solid background, over the animation */
+.home-panel {
+  padding-block: 4rem;
+  background-color: #0e1117;
+  border-top: 1px solid #232a33;
+}
+
+.home-panel > * {
+  max-width: 80rem; /* wide enough that three cards stay full-size */
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+.home-panel h2 {
+  margin-block: 0 0.5rem;
+  font-size: 2rem;
+  color: #e6edf3;
+}
+
+.home-panel > p {
+  margin-top: 0;
+  color: #9aa7b4;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* an unfinished last row stays centred */
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.card {
+  box-sizing: border-box; /* so the border fits inside the width */
+  flex: 0 1 calc((100% - 3rem) / 3); /* three across */
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #2a313c;
+  border-radius: 0.75rem;
+  background-color: #161b22;
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.card > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: #e6edf3;
+}
+
+.card p {
+  margin: 0 0 1rem;
+  color: #9aa7b4;
+}
+
+.card a {
+  margin-top: auto;
+  font-weight: 600;
+  text-decoration: none;
+  color: #00ffcc;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+.collab {
+  text-align: center;
+}
+
+.collab > p {
+  max-width: 40rem;
+  margin-bottom: 2rem;
+}
+
+.collab .actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* --- Resume --- */
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin: 0 0 0.5rem;
+}
+
+/* --- Projects page: image beside each project, alternating sides --- */
+
+.project {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.project img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+/* Every second project puts its image on the left */
+.project:nth-of-type(even) img {
+  order: -1;
+}
+
+@media (max-width: 40rem) {
+  .card {
+    flex-basis: 100%;
+  }
+
+  .project {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .project:nth-of-type(even) img {
+    order: 0;
+  }
+}
+
+@media (max-width: 45rem) {
+  .site-header {
+    padding-inline: 1rem;
+  }
+
+  .hero > div {
+    max-width: none;
+  }
+}

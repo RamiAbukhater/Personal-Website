@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rami Abukhater: Personal site and portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="hero.js" defer></script>
+  </head>
+  <body class="home">
+    <canvas role="img" aria-label="Floating nodes linking up into a rotating 3D brain"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="./">Rami Abukhater</a>
+      <nav>
+        <a href="./" aria-current="page">Home</a>
+        <a href="./projects/">Projects</a>
+        <a href="./resume/">Resume</a>
+        <a href="https://linkedin.com/in/Rami-Abukhater" target="_blank">Contact</a>
+        <a href="https://github.com/RamiAbukhater" target="_blank">GitHub</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>Rami Abukhater</h1>
+        <p class="tagline">Perception, Cognitive Science &amp; Artificial Minds</p>
+        <p class="bio">
+          I study how biological and artificial systems perceive, represent, and
+          reason about the world, working at the intersection of neuroscience,
+          cognitive science, and AI systems design. This site is a living
+          notebook, part CV and part research garden.
+        </p>
+      </div>
+      <a class="scroll-cue" href="#current-projects">Current projects &amp; roles ↓</a>
+    </section>
+
+    <section id="current-projects" class="home-panel">
+      <h2>Current Projects &amp; Roles</h2>
+      <p>What I am building right now, across industry, student teams, and my own research.</p>
+
+      <div class="cards">
+        <article class="card">
+          <img src="images/projects/selene.jpg" alt="Dental mirror in front of a dental chair" />
+          <div>
+            <h3>Selene Nanorobotics, Sensing &amp; Navigation for Root-Canal Microrobots</h3>
+            <p>
+              Selene is building magnetically steered microrobots that clear
+              bacterial biofilm from inside root canals, places conventional
+              treatment struggles to reach. I lead sensor simulation and
+              navigation, building the simulator that works out how to tell where
+              a robot is inside the canal, and turning it into a tool that
+              searches for better robot designs and sensor layouts. Specifics are
+              under NDA.
+            </p>
+            <a href="https://selenenanorobotics.com/" target="_blank">Visit Selene →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/projects/triton-ai.jpg" alt="White self-driving car on a city street" />
+          <div>
+            <h3>Triton AI, Perception for an Autonomous Vehicle</h3>
+            <p>
+              On UC San Diego's student autonomy team, I am building the
+              perception stack that lets our vehicle see. I brought up its first
+              full sensing suite, front and rear cameras plus a 360° LiDAR
+              calibrated into one synchronized view of the world, the foundation
+              the rest of the autonomy stack builds on.
+            </p>
+            <a href="resume/">See my role →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/projects/dataworks.jpg" alt="Blue wave of light on a black background, like a sound wave" />
+          <div>
+            <h3>DataWorks, Audio-Perception Lab</h3>
+            <p>
+              I lead an audio-perception lab inside UC San Diego's student data
+              science organization. We are building a shared pipeline that turns
+              raw sound into tokens a multimodal transformer can read, then
+              testing whether one general model can match classifiers built for a
+              single task.
+            </p>
+            <a href="resume/">See my role →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/projects/lai-research.jpg" alt="Clock on the side of a building" />
+          <div>
+            <h3>Why We Procrastinate, Reinforcement Learning Research</h3>
+            <p>
+              In Prof. Lucy Lai's group in UC San Diego Cognitive Science, which
+              studies how people learn and decide with limited cognitive
+              resources, I am asking why people put things off. I am rewriting the
+              Bellman equation at the heart of reinforcement learning so agents
+              procrastinate the way people do, then fitting them to human data to
+              test whether discounting the future is enough to explain it.
+            </p>
+            <a href="https://lucylai.com/research.html" target="_blank">About the lab →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/projects/via.jpg" alt="White robotic arm in a showroom" />
+          <div>
+            <h3>VIA, Cognitively-Grounded Vision-Language-Action Model</h3>
+            <p>
+              A robot-learning model that reasons instead of reacting. Rather than
+              mapping camera frames straight to actions, VIA keeps a probabilistic
+              belief about the world, infers the goal behind a language
+              instruction, and mentally simulates options before it acts.
+            </p>
+            <a href="https://github.com/RamiAbukhater/via-model" target="_blank">View on GitHub →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/projects/room-mesh.jpg" alt="Empty room with a wood floor and a large window" />
+          <div>
+            <h3>Room Mesh to MuJoCo Simulation Environment</h3>
+            <p>
+              A pipeline that turns a scanned 3D room into a simulation-ready MuJoCo
+              environment, so real captured spaces can be used directly as
+              robot-learning scenes.
+            </p>
+            <a href="projects/">Read more →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="home-panel collab">
+      <h2>Interested in collaborating or contributing?</h2>
+      <p>
+        I am always happy to talk about perception, simulation, and cognitively
+        grounded AI. If one of these projects overlaps with your work, or you
+        would like to contribute, please reach out.
+      </p>
+      <div class="actions">
+        <a class="button" href="https://linkedin.com/in/Rami-Abukhater" target="_blank">Get in touch on LinkedIn</a>
+        <a class="button secondary" href="https://github.com/RamiAbukhater" target="_blank">See my GitHub</a>
+      </div>
+    </section>
+  </body>
+</html>
