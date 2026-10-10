@@ -11,9 +11,9 @@
       <a class="brand" href="../">Rami Abukhater</a>
       <nav>
         <a href="../">Home</a>
-        <a href="../projects/" aria-current="page">Projects</a>
+        <a href="../projects/" class="current" aria-current="page">Projects</a>
         <a href="../resume/">Resume</a>
-        <a href="https://linkedin.com/in/Rami-Abukhater" target="_blank">Contact</a>
+        <a href="../contact/">Contact</a>
         <a href="https://github.com/RamiAbukhater" target="_blank">GitHub</a>
       </nav>
     </header>
@@ -23,148 +23,152 @@
     <section>
       <h2>Current Projects</h2>
 
-      <article class="project">
-        <div>
+      <div class="projects">
+        <article>
           <h3>VIA, Cognitively-Grounded Vision-Language-Action Model</h3>
-          <p><time datetime="2026">2026</time> – Present</p>
-          <p>Python · PyTorch · SigLIP · RSSM world model · active inference · LIBERO</p>
-          <ul>
-            <li>
-              Replacing direct observation-to-action mapping with probabilistic
-              inference over a latent world state, across five PyTorch modules
-              for perception, belief filtering, RSA goal inference, world
-              modeling, and CEM planning.
-            </li>
-            <li>
-              Trained on the LIBERO spatial suite (432 demonstrations) on UCSD
-              DSMLP A5000 GPUs, root-causing a belief-state variance collapse to
-              the absence of occlusions in the demonstration data.
-            </li>
-          </ul>
-          <p><a href="https://github.com/RamiAbukhater/via-model" target="_blank">View the code on GitHub</a></p>
-        </div>
-        <img src="../images/projects/via.jpg" alt="White robotic arm in a showroom" />
-      </article>
+          <img src="../images/projects/via.jpg" alt="White robotic arm in a showroom" />
+          <div>
+            <p><time datetime="2026">2026</time> – Present</p>
+            <p>Python · PyTorch · SigLIP · RSSM world model · active inference · LIBERO</p>
+            <ul>
+              <li>
+                Replacing direct observation-to-action mapping with probabilistic
+                inference over a latent world state, across five PyTorch modules
+                for perception, belief filtering, RSA goal inference, world
+                modeling, and CEM planning.
+              </li>
+              <li>
+                Trained on the LIBERO spatial suite (432 demonstrations) on UCSD
+                DSMLP A5000 GPUs, root-causing a belief-state variance collapse to
+                the absence of occlusions in the demonstration data.
+              </li>
+            </ul>
+            <p><a href="https://github.com/RamiAbukhater/via-model" target="_blank">View the code on GitHub</a></p>
+          </div>
+        </article>
 
-      <article class="project">
-        <div>
+        <article>
           <h3>Room Mesh to MuJoCo Simulation Environment</h3>
-          <p><time datetime="2026">2026</time> – Present</p>
-          <p>Python · MuJoCo · 3D mesh processing</p>
-          <ul>
-            <li>
-              Building a pipeline that turns a scanned 3D room mesh into a
-              simulation-ready MuJoCo environment, so real captured spaces can
-              be used directly as robot-learning scenes.
-            </li>
-          </ul>
-        </div>
-        <img src="../images/projects/room-mesh.jpg" alt="Empty room with a wood floor and a large window" />
-      </article>
+          <img src="../images/projects/room-mesh.jpg" alt="Empty room with a wood floor and a large window" />
+          <div>
+            <p><time datetime="2026">2026</time> – Present</p>
+            <p>Python · MuJoCo · 3D mesh processing</p>
+            <ul>
+              <li>
+                Building a pipeline that turns a scanned 3D room mesh into a
+                simulation-ready MuJoCo environment, so real captured spaces can
+                be used directly as robot-learning scenes.
+              </li>
+            </ul>
+          </div>
+        </article>
 
-      <article class="project">
-        <div>
+        <article>
           <h3>Macro Optimizer, Constrained Meal Optimization</h3>
-          <p><time datetime="2026">2026</time></p>
-          <p>Python · PuLP/CBC integer linear programming · Flask · pytest</p>
-          <ul>
-            <li>
-              Built an integer-linear-programming engine that finds the cheapest
-              combination of UCSD campus food meeting daily macro targets within
-              a dining-dollar budget, with a soft-constraint fallback when no
-              exact solution fits.
-            </li>
-            <li>
-              Integrated live nutrition data from UCSD Dining, Open Food Facts,
-              and USDA FoodData Central behind a Flask app and weekly menu
-              planner with anti-repetition and time-budget constraints, backed
-              by a pytest suite.
-            </li>
-          </ul>
-          <p><a href="https://github.com/RamiAbukhater/Macro-Optimizer" target="_blank">View the code on GitHub</a></p>
-        </div>
-        <img src="../images/projects/macro-optimizer.jpg" alt="Glass meal-prep containers filled with rice and vegetables" />
-      </article>
+          <img src="../images/projects/macro-optimizer.jpg" alt="Glass meal-prep containers filled with rice and vegetables" />
+          <div>
+            <p><time datetime="2026">2026</time></p>
+            <p>Python · PuLP/CBC integer linear programming · Flask · pytest</p>
+            <ul>
+              <li>
+                Built an integer-linear-programming engine that finds the cheapest
+                combination of UCSD campus food meeting daily macro targets within
+                a dining-dollar budget, with a soft-constraint fallback when no
+                exact solution fits.
+              </li>
+              <li>
+                Integrated live nutrition data from UCSD Dining, Open Food Facts,
+                and USDA FoodData Central behind a Flask app and weekly menu
+                planner with anti-repetition and time-budget constraints, backed
+                by a pytest suite.
+              </li>
+            </ul>
+            <p><a href="https://github.com/RamiAbukhater/Macro-Optimizer" target="_blank">View the code on GitHub</a></p>
+          </div>
+        </article>
 
-      <article class="project">
-        <div>
+        <article>
           <h3>PiCar Lane Following and Obstacle Avoidance</h3>
-          <p><time datetime="2026">2026</time></p>
-          <p>Python · computer vision · vision-language models</p>
-          <ul>
-            <li>
-              Built real-time lane-following and obstacle-avoidance control on a
-              PiCar platform using computer vision for lane detection.
-            </li>
-            <li>
-              Prototyped a vision-language-model decision manager using scene
-              understanding to inform real-time driving decisions (course
-              project, DSC 190).
-            </li>
-          </ul>
-        </div>
-        <img src="../images/projects/picar.jpg" alt="Small toy car driving over rocks" />
-      </article>
+          <img src="../images/projects/picar.jpg" alt="Small toy car driving over rocks" />
+          <div>
+            <p><time datetime="2026">2026</time></p>
+            <p>Python · computer vision · vision-language models</p>
+            <ul>
+              <li>
+                Built real-time lane-following and obstacle-avoidance control on a
+                PiCar platform using computer vision for lane detection.
+              </li>
+              <li>
+                Prototyped a vision-language-model decision manager using scene
+                understanding to inform real-time driving decisions (course
+                project, DSC 190).
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
     </section>
 
     <section>
       <h2>Past Projects</h2>
 
-      <article class="project">
-        <div>
+      <div class="projects">
+        <article>
           <h3>BinTek, CV-Assisted Data Pipeline</h3>
-          <p><time datetime="2026-01">January 2026</time></p>
-          <p>Python · FastAPI · PostgreSQL</p>
-          <ul>
-            <li>
-              Built a FastAPI backend with a PostgreSQL database for data
-              ingestion, cleaning, storage, and statistical analysis.
-            </li>
-            <li>
-              Integrated the Eyepop.ai computer-vision API for automated data
-              collection and waste classification.
-            </li>
-          </ul>
-        </div>
-        <img src="../images/projects/bintek.jpg" alt="Red, yellow, and green waste bins" />
-      </article>
+          <img src="../images/projects/bintek.jpg" alt="Red, yellow, and green waste bins" />
+          <div>
+            <p><time datetime="2026-01">January 2026</time></p>
+            <p>Python · FastAPI · PostgreSQL</p>
+            <ul>
+              <li>
+                Built a FastAPI backend with a PostgreSQL database for data
+                ingestion, cleaning, storage, and statistical analysis.
+              </li>
+              <li>
+                Integrated the Eyepop.ai computer-vision API for automated data
+                collection and waste classification.
+              </li>
+            </ul>
+          </div>
+        </article>
 
-      <article class="project">
-        <div>
+        <article>
           <h3>Menu Generator, Full-Stack Web App</h3>
-          <p><time datetime="2025-07">July 2025</time></p>
-          <p>React/Node.js · Spring Boot REST API · MariaDB</p>
-          <ul>
-            <li>
-              Architected and deployed a full-stack menu-planning web app end to
-              end, with a React/Node.js frontend, a Spring Boot REST API, and a
-              self-hosted MariaDB database on a NAS.
-            </li>
-            <li>
-              Designed the data model, REST endpoints, and a responsive UI,
-              owning the system from schema through production deployment.
-            </li>
-          </ul>
-          <p><a href="https://github.com/RamiAbukhater/Menu-Gen" target="_blank">View the code on GitHub</a></p>
-        </div>
-        <img src="../images/projects/menu-generator.jpg" alt="Family eating together at a table" />
-      </article>
+          <img src="../images/projects/menu-generator.jpg" alt="Family eating together at a table" />
+          <div>
+            <p><time datetime="2025-07">July 2025</time></p>
+            <p>React/Node.js · Spring Boot REST API · MariaDB</p>
+            <ul>
+              <li>
+                Architected and deployed a full-stack menu-planning web app end to
+                end, with a React/Node.js frontend, a Spring Boot REST API, and a
+                self-hosted MariaDB database on a NAS.
+              </li>
+              <li>
+                Designed the data model, REST endpoints, and a responsive UI,
+                owning the system from schema through production deployment.
+              </li>
+            </ul>
+            <p><a href="https://github.com/RamiAbukhater/Menu-Gen" target="_blank">View the code on GitHub</a></p>
+          </div>
+        </article>
 
-      <article class="project">
-        <div>
+        <article>
           <h3>RoboNurse</h3>
-          <p><time datetime="2024-05">May 2024</time>, DA Hacks 3.5 hackathon award winner</p>
-          <p>Arduino (C++) · Raspberry Pi (Python) · ChatGPT API</p>
-          <ul>
-            <li>
-              Programmed Arduino in C++ for movement and Raspberry Pi in Python
-              for speech processing in a nursing-assistant robot.
-            </li>
-            <li>Integrated the ChatGPT API for symptom analysis.</li>
-          </ul>
-        </div>
-        <img src="../images/projects/robonurse.jpg" alt="Arduino circuit board" />
-      </article>
+          <img src="../images/projects/robonurse.jpg" alt="Arduino circuit board" />
+          <div>
+            <p><time datetime="2024-05">May 2024</time>, DA Hacks 3.5 hackathon award winner</p>
+            <p>Arduino (C++) · Raspberry Pi (Python) · ChatGPT API</p>
+            <ul>
+              <li>
+                Programmed Arduino in C++ for movement and Raspberry Pi in Python
+                for speech processing in a nursing-assistant robot.
+              </li>
+              <li>Integrated the ChatGPT API for symptom analysis.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
     </section>
   </body>
 </html>
