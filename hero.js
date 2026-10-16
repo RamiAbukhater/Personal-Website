@@ -208,10 +208,12 @@ function edgeRadius({ r, seed }, angle) {
 }
 
 // A run of solid steps climbing towards local -z
+// The top step stops just short of the terrace it climbs to; if the two tops
+// were level they would flicker through each other as the island turns
 function stairs(steps, rise, run, width, color = C.stone) {
   const g = new THREE.Group();
   for (let i = 0; i < steps; i++) {
-    const h = rise * (i + 1);
+    const h = rise * (i + 1) - 0.02;
     g.add(at(box(width, h, run, color), 0, h / 2, -i * run));
   }
   return g;
