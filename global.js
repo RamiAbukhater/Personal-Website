@@ -84,7 +84,7 @@ let prefersDark = matchMedia('(prefers-color-scheme: dark)');
 );
 
 let button = document.querySelector('.color-scheme');
-let current = 0; // Automatic by default
+let current = 0;
 
 function setColorScheme(colorScheme) {
   current = Math.max(SCHEMES.findIndex((s) => s.value === colorScheme), 0);
@@ -105,7 +105,7 @@ function setColorScheme(colorScheme) {
 if ('colorScheme' in localStorage) {
   setColorScheme(localStorage.colorScheme);
 } else {
-  setColorScheme('light dark');
+  setColorScheme('light'); // new visitors start in daytime
 }
 
 // Keep the "Automatic (Dark/Light)" label right if the OS setting changes
