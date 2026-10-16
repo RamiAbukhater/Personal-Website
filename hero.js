@@ -770,15 +770,6 @@ for (const [x, y, z, s] of [[-10, -3.5, 4.5, 1.4], [8.5, -4, -6, 1.2], [3.5, -6,
 
 const scene = new THREE.Scene();
 scene.add(island, ...clouds);
-scene.add(new THREE.HemisphereLight(0xfff4e2, 0xc99f7c, 1.9));
-const sun = new THREE.DirectionalLight(0xfff0d8, 2.4);
-sun.position.set(8, 18, 4);
-sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
-Object.assign(sun.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12, near: 1, far: 50 });
-sun.shadow.bias = -0.0005;
-sun.shadow.normalBias = 0.02;
-scene.add(sun);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0);
@@ -803,6 +794,133 @@ Object.assign(controls, {
 });
 if (!finePointer) canvas.style.touchAction = "auto";
 controls.update();
+
+// --- Sky: a sun by day, a moon by night ---
+// Light mode is day and dark mode is night. When the theme changes, the sun
+// climbs up out of view while the moon rises from behind the island, and the
+// light cools and dims. Each is a directional light that casts shadows from
+// where its disc sits on screen, so the shadows follow it.
+
+const ambient = new THREE.HemisphereLight(0xfff4e2, 0xc99f7c, 1.9);
+const DAY = { sky: new THREE.Color(0xfff4e2), ground: new THREE.Color(0xc99f7c), intensity: 1.9 };
+const NIGHT = { sky: new THREE.Color(0x7385bd), ground: new THREE.Color(0x3a3352), intensity: 0.8 };
+
+function shadowLight(color) {
+  const light = new THREE.DirectionalLight(color, 0);
+  light.castShadow = true;
+  light.shadow.mapSize.set(2048, 2048);
+  Object.assign(light.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12, near: 1, far: 60 });
+  light.shadow.bias = -0.0005;
+  light.shadow.normalBias = 0.02;
+  light.target.position.copy(TARGET);
+  scene.add(light, light.target);
+  return light;
+}
+
+const sunLight = shadowLight(0xfff0d8);
+const moonLight = shadowLight(0xc4d2ff);
+
+const sunDisc = sprite((ctx) => {
+  const halo = ctx.createRadialGradient(64, 64, 20, 64, 64, 64);
+  halo.addColorStop(0, "rgb(255 214 130 / 75%)");
+  halo.addColorStop(1, "rgb(255 214 130 / 0%)");
+  ctx.fillStyle = halo;
+  ctx.fillRect(0, 0, 128, 128);
+  ctx.fillStyle = "#ffd27a";
+  ctx.beginPath();
+  ctx.arc(64, 64, 26, 0, Math.PI * 2);
+  ctx.fill();
+}, 4.5);
+
+const moonDisc = sprite((ctx) => {
+  const halo = ctx.createRadialGradient(64, 64, 20, 64, 64, 64);
+  halo.addColorStop(0, "rgb(214 224 255 / 45%)");
+  halo.addColorStop(1, "rgb(214 224 255 / 0%)");
+  ctx.fillStyle = halo;
+  ctx.fillRect(0, 0, 128, 128);
+  ctx.fillStyle = "#f1ecdf";
+  ctx.beginPath();
+  ctx.arc(64, 64, 24, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#d9d2c1"; // craters
+  for (const [x, y, r] of [[56, 56, 6], [72, 68, 4], [60, 76, 3], [74, 52, 3]]) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}, 4);
+
+scene.add(ambient, sunDisc, moonDisc);
+
+// Where each body sits, in island-sized units from the island's centre on
+// screen (right, up), at day (0) and night (1)
+const SUN_UP = [7.5, 17]; // shining over the island, then up past the top edge
+const MOON_UP = [-15, 7]; // hidden behind the island, then risen over it
+const SKY_RIGHT = 5.5;
+const TRANSITION_SECONDS = 3;
+
+const darkScheme = matchMedia("(prefers-color-scheme: dark)");
+function isNight() {
+  const scheme = document.documentElement.style.getPropertyValue("color-scheme");
+  return scheme === "dark" || (scheme !== "light" && darkScheme.matches);
+}
+
+let night = isNight() ? 1 : 0;
+let nightTarget = night;
+
+const smooth = (x) => {
+  x = Math.min(Math.max(x, 0), 1);
+  return x * x * (3 - 2 * x);
+};
+const lerp = (a, b, t) => a + (b - a) * t;
+
+const right = new THREE.Vector3();
+const up = new THREE.Vector3();
+const back = new THREE.Vector3();
+function placeBody(disc, light, height, intensity) {
+  // The disc sits far behind the island so the island can hide it
+  disc.position.copy(TARGET).addScaledVector(right, SKY_RIGHT).addScaledVector(up, height).addScaledVector(back, -30);
+  // The light shines from the same spot on screen, but from in front of the
+  // island and never from below it, so the visible faces stay lit
+  light.position
+    .set(0, 0, 0)
+    .addScaledVector(right, SKY_RIGHT)
+    .addScaledVector(up, Math.max(height, 3))
+    .addScaledVector(back, 8)
+    .setLength(25)
+    .add(TARGET);
+  light.intensity = intensity;
+}
+
+function placeSky() {
+  camera.updateMatrixWorld();
+  camera.matrixWorld.extractBasis(right, up, back);
+  const sunT = smooth(night / 0.6); // the sun leaves first...
+  const moonT = smooth((night - 0.4) / 0.6); // ...and the moon follows
+  placeBody(sunDisc, sunLight, lerp(SUN_UP[0], SUN_UP[1], sunT), 2.4 * (1 - sunT));
+  placeBody(moonDisc, moonLight, lerp(MOON_UP[0], MOON_UP[1], moonT), 1.1 * moonT);
+  const t = smooth(night);
+  ambient.color.lerpColors(DAY.sky, NIGHT.sky, t);
+  ambient.groundColor.lerpColors(DAY.ground, NIGHT.ground, t);
+  ambient.intensity = lerp(DAY.intensity, NIGHT.intensity, t);
+}
+
+function stepSky(dt) {
+  if (night === nightTarget) return;
+  const step = dt / TRANSITION_SECONDS;
+  night = nightTarget > night ? Math.min(night + step, nightTarget) : Math.max(night - step, nightTarget);
+}
+
+// Follow the theme switcher (it sets color-scheme on <html>) and the OS setting
+function onThemeChange() {
+  nightTarget = isNight() ? 1 : 0;
+  if (!running) {
+    night = nightTarget; // nothing is animating, so jump straight there
+    render();
+  }
+}
+new MutationObserver(onThemeChange).observe(document.documentElement, { attributes: true, attributeFilter: ["style"] });
+darkScheme.addEventListener("change", onThemeChange);
 
 // Frame the island: the right half on wide windows (clear of the text),
 // centred under the text on narrow ones
@@ -856,6 +974,7 @@ function placeMarkers() {
 function render() {
   if (!width) return;
   island.updateMatrixWorld();
+  placeSky();
   renderer.render(scene, camera);
   placeMarkers();
 }
@@ -874,9 +993,13 @@ function animate(t) {
 }
 
 let running = false;
+let lastTime = 0;
 function frame() {
   if (!running) return;
-  animate(clock.getElapsedTime());
+  const t = clock.getElapsedTime();
+  stepSky(Math.min(t - lastTime, 0.1));
+  lastTime = t;
+  animate(t);
   controls.update();
   render();
   requestAnimationFrame(frame);

@@ -217,6 +217,7 @@ html:has(.home) {
   --ink-faint: light-dark(#6b7380, #8590a2);
   --link: light-dark(var(--color-accent), #8fb3ea);
   background-color: var(--paper);
+  transition: background-color 2.5s; /* in step with the sun setting on the island */
 }
 
 .home h1,
