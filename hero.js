@@ -937,6 +937,9 @@ function resize() {
   const wide = width >= 720;
   // The canvas runs under the sticky header, so fit the island to the space below it
   const header = document.querySelector(".site-header")?.offsetHeight ?? 0;
+  // The markers sit inside the hero, which starts below the header; line their layer up with the canvas
+  markerLayer.style.top = `${canvas.getBoundingClientRect().top - hero.getBoundingClientRect().top}px`;
+  markerLayer.style.height = `${height}px`;
   const below = height - header;
   // How many pixels the island gets across its widest (about 17.5 units, rough edges included)
   const islandPixels = wide ? Math.min(width * 0.53, below * 0.85) : Math.min(width * 0.95, height * 0.46);

@@ -305,11 +305,14 @@ body.home {
 
 /* Layers, bottom to top: the island canvas, the hero (text and markers),
    the panels that scroll up over it all, and the header */
+/* The island fills the first screen (under the header and hero) and scrolls
+   away with it, rather than staying fixed behind the panels */
 .home canvas {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  height: 100svh;
   z-index: 0;
 }
 
@@ -349,9 +352,11 @@ body.home > .hero {
   pointer-events: auto;
 }
 
+/* Lined up exactly over the canvas by hero.js */
 .hero > .map-markers {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  left: 0;
+  width: 100%;
   max-width: none;
   margin: 0;
   overflow: hidden;
