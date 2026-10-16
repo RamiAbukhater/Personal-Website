@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Rami Abukhater: Personal site and portfolio</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="hero.js" defer></script>
+    <script type="module" src="global.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="hero.js"></script>
+    <script src="roles.js" defer></script>
   </head>
   <body class="home">
-    <canvas role="img" aria-label="Floating nodes linking up into a rotating 3D brain"></canvas>
+    <canvas role="img" aria-label="A small floating sandstone town, slowly turning, with a marker for each current project"></canvas>
 
     <header class="site-header">
       <a class="brand" href="./">Rami Abukhater</a>
-      <nav>
-        <a href="./" class="current" aria-current="page">Home</a>
-        <a href="./projects/">Projects</a>
-        <a href="./resume/">Resume</a>
-        <a href="./contact/">Contact</a>
-        <a href="https://github.com/RamiAbukhater" target="_blank">GitHub</a>
-      </nav>
     </header>
 
     <section class="hero">
@@ -32,6 +35,7 @@
           notebook, part CV and part research garden.
         </p>
       </div>
+      <div class="map-markers" aria-label="Projects on the map"></div>
       <a class="scroll-cue" href="#current-projects">Current projects &amp; roles ↓</a>
     </section>
 
@@ -39,96 +43,151 @@
       <h2>Current Projects &amp; Roles</h2>
       <p>What I am building right now, across industry, student teams, and my own research.</p>
 
-      <div class="cards">
-        <article class="card">
-          <img src="images/projects/selene.jpg" alt="Dental mirror in front of a dental chair" />
-          <div>
-            <h3>Selene Nanorobotics, Sensing &amp; Navigation for Root-Canal Microrobots</h3>
-            <p>
-              Selene is building magnetically steered microrobots that clear
-              bacterial biofilm from inside root canals, places conventional
-              treatment struggles to reach. I lead sensor simulation and
-              navigation, building the simulator that works out how to tell where
-              a robot is inside the canal, and turning it into a tool that
-              searches for better robot designs and sensor layouts. Specifics are
-              under NDA.
-            </p>
-            <a href="https://selenenanorobotics.com/" target="_blank">Visit Selene →</a>
-          </div>
-        </article>
+      <section class="interest" aria-labelledby="ai-safety">
+        <header>
+          <p class="interest-number">01</p>
+          <h3 id="ai-safety">AI Safety &amp; Interpretability</h3>
+          <p>Understanding how learning systems represent goals and make decisions, so their behaviour can be explained and trusted.</p>
+        </header>
+        <div class="cards">
+          <article class="card" id="card-assistant-axis">
+            <img src="images/projects/interpretability-lab.svg" alt="Persona points spread along one axis, from other personas to the Assistant, with a dashed line marking the activation cap" />
+            <div>
+              <h4>DataWorks, AI Interpretability Lab</h4>
+              <p>
+                I lead an AI interpretability lab inside UC San Diego's student
+                data science organization. We are working through Anthropic's
+                <cite>The Assistant Axis</cite>, which finds a single direction in a
+                language model's activations that tracks how much it is acting as
+                its helpful Assistant persona, and shows that capping drift along
+                it roughly halves harmful responses.
+              </p>
+              <a href="https://www.anthropic.com/research/assistant-axis" target="_blank">Read the paper →</a>
+            </div>
+          </article>
+          <article class="card" id="card-social-adjacency">
+            <img src="images/projects/social-adjacency.svg" alt="A person beside their friends, trading chat messages with a language model" />
+            <div>
+              <h4>The Social Adjacency of LLMs, Working Paper</h4>
+              <p>
+                With a colleague at UC Berkeley, I am writing a paper on why we
+                treat LLMs as socially adjacent beings. It builds on David
+                Chalmers' <cite>What We Talk to When We Talk to Language
+                Models</cite>, which casts the things we chat with as quasi-agents
+                tied to a conversation, and on Daniel Dennett's <cite>True
+                Believers</cite>, which holds that anything whose behaviour is
+                reliably predicted by treating it as a believer really is one.
+              </p>
+              <a href="https://news.berkeley.edu/2026/07/10/berkeley-talks-when-we-talk-to-ai-what-are-we-talking-to/" target="_blank">Hear Chalmers' talk →</a>
+            </div>
+          </article>
+          <article class="card" id="card-alignment">
+            <img src="images/projects/alignment-fellowship.svg" alt="An eight-week timeline marking interpretability, RLHF, AI policy, and catastrophic risk, beside a stack of papers" />
+            <div>
+              <h4>AI Alignment at UC San Diego, Intro Fellowship</h4>
+              <p>
+                I am a fellow in the Fall 2026 cohort of AIA's Intro Fellowship,
+                an 8-week introduction to AI alignment adapted from MIT AI
+                Alignment and BlueDot Impact materials. Weekly sessions cover
+                interpretability, RLHF, AI policy, and catastrophic risk, alongside
+                AIA's speaker events and paper replications.
+              </p>
+              <a href="https://aialignmentatucsd.org/" target="_blank">Visit AIA →</a>
+            </div>
+          </article>
+          <article class="card" id="card-procrastination">
+            <img src="images/projects/procrastination.svg" alt="Bar chart where effort stays low over time and spikes just before a deadline, under a rising curve of discounted value" />
+            <div>
+              <h4>Why We Procrastinate, Reinforcement Learning Research</h4>
+              <p>
+                In Prof. Lucy Lai's group in UC San Diego Cognitive Science, which
+                studies how people learn and decide with limited cognitive
+                resources, I am asking why people put things off. I am rewriting the
+                Bellman equation at the heart of reinforcement learning so agents
+                procrastinate the way people do, then fitting them to human data to
+                test whether discounting the future is enough to explain it.
+              </p>
+              <a href="https://lucylai.com/research.html" target="_blank">About the lab →</a>
+            </div>
+          </article>
+        </div>
+      </section>
 
-        <article class="card">
-          <img src="images/projects/triton-ai.jpg" alt="White self-driving car on a city street" />
-          <div>
-            <h3>Triton AI, Perception for an Autonomous Vehicle</h3>
-            <p>
-              On UC San Diego's student autonomy team, I am building the
-              perception stack that lets our vehicle see. I brought up its first
-              full sensing suite, front and rear cameras plus a 360° LiDAR
-              calibrated into one synchronized view of the world, the foundation
-              the rest of the autonomy stack builds on.
-            </p>
-            <a href="resume/">See my role →</a>
-          </div>
-        </article>
+      <section class="interest" aria-labelledby="autonomy">
+        <header>
+          <p class="interest-number">02</p>
+          <h3 id="autonomy">Autonomy &amp; Perception Engineering</h3>
+          <p>Building the sensing, simulation, and perception stacks that let robots and vehicles understand where they are.</p>
+        </header>
+        <div class="cards">
+          <article class="card" id="card-selene">
+            <img src="images/projects/selene.svg" alt="A tooth with a microrobot inside one root canal, linked by dashed lines to four sensors around it" />
+            <div>
+              <h4>Selene Nanorobotics, Sensing &amp; Navigation for Root-Canal Microrobots</h4>
+              <p>
+                Selene is building magnetically steered microrobots that clear
+                bacterial biofilm from inside root canals, places conventional
+                treatment struggles to reach. I lead sensor simulation and
+                navigation, building the simulator that works out how to tell where
+                a robot is inside the canal, and turning it into a tool that
+                searches for better robot designs and sensor layouts. Specifics are
+                under NDA.
+              </p>
+              <a href="https://selenenanorobotics.com/" target="_blank">Visit Selene →</a>
+            </div>
+          </article>
+          <article class="card" id="card-triton">
+            <img src="images/projects/triton-ai.svg" alt="A car seen from above, with front and rear camera views and rings of LiDAR points around it" />
+            <div>
+              <h4>Triton AI, Perception for an Autonomous Vehicle</h4>
+              <p>
+                On UC San Diego's student autonomy team, I am building the
+                perception stack that lets our vehicle see. I brought up its first
+                full sensing suite, front and rear cameras plus a 360° LiDAR
+                calibrated into one synchronized view of the world, the foundation
+                the rest of the autonomy stack builds on.
+              </p>
+              <a href="resume/">See my role →</a>
+            </div>
+          </article>
+          <article class="card" id="card-audio">
+            <img src="images/projects/audio-lab.svg" alt="A sound wave turned into a log-mel spectrogram, then into tokens feeding a transformer" />
+            <div>
+              <h4>DataWorks, Audio-Perception Lab</h4>
+              <p>
+                I lead an audio-perception lab inside UC San Diego's student data
+                science organization. We are building a shared pipeline that turns
+                raw sound into tokens a multimodal transformer can read, then
+                testing whether one general model can match classifiers built for a
+                single task.
+              </p>
+              <a href="resume/">See my role →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </section>
 
-        <article class="card">
-          <img src="images/projects/dataworks.jpg" alt="Blue wave of light on a black background, like a sound wave" />
-          <div>
-            <h3>DataWorks, Audio-Perception Lab</h3>
-            <p>
-              I lead an audio-perception lab inside UC San Diego's student data
-              science organization. We are building a shared pipeline that turns
-              raw sound into tokens a multimodal transformer can read, then
-              testing whether one general model can match classifiers built for a
-              single task.
-            </p>
-            <a href="resume/">See my role →</a>
-          </div>
-        </article>
+    <section id="roles" class="home-panel roles">
+      <h2>Roles &amp; Experience</h2>
+      <p>Everywhere I have worked, researched, and led, current and past. Each logo is ringed in the colour of its theme. Hover over one for a moment, or tap it, to read about the role.</p>
 
-        <article class="card">
-          <img src="images/projects/lai-research.jpg" alt="Clock on the side of a building" />
-          <div>
-            <h3>Why We Procrastinate, Reinforcement Learning Research</h3>
-            <p>
-              In Prof. Lucy Lai's group in UC San Diego Cognitive Science, which
-              studies how people learn and decide with limited cognitive
-              resources, I am asking why people put things off. I am rewriting the
-              Bellman equation at the heart of reinforcement learning so agents
-              procrastinate the way people do, then fitting them to human data to
-              test whether discounting the future is enough to explain it.
-            </p>
-            <a href="https://lucylai.com/research.html" target="_blank">About the lab →</a>
-          </div>
-        </article>
+      <ul class="roles-legend" aria-label="Colour key"></ul>
 
-        <article class="card">
-          <img src="images/projects/via.jpg" alt="White robotic arm in a showroom" />
-          <div>
-            <h3>VIA, Cognitively-Grounded Vision-Language-Action Model</h3>
-            <p>
-              A robot-learning model that reasons instead of reacting. Rather than
-              mapping camera frames straight to actions, VIA keeps a probabilistic
-              belief about the world, infers the goal behind a language
-              instruction, and mentally simulates options before it acts.
-            </p>
-            <a href="https://github.com/RamiAbukhater/via-model" target="_blank">View on GitHub →</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="images/projects/room-mesh.jpg" alt="Empty room with a wood floor and a large window" />
-          <div>
-            <h3>Room Mesh to MuJoCo Simulation Environment</h3>
-            <p>
-              A pipeline that turns a scanned 3D room into a simulation-ready MuJoCo
-              environment, so real captured spaces can be used directly as
-              robot-learning scenes.
-            </p>
-            <a href="projects/">Read more →</a>
-          </div>
-        </article>
+      <div class="roles-field">
+        <div id="role-card" class="role-card" role="tooltip" hidden>
+          <p class="role-card-tag"></p>
+          <p class="role-card-theme"></p>
+          <h3 class="role-card-org"></h3>
+          <p class="role-card-role"></p>
+          <p class="role-card-previously" hidden></p>
+          <p class="role-card-period"></p>
+          <p class="role-card-blurb">
+            <span class="role-card-typed" aria-hidden="true"></span><span class="role-card-full"></span>
+          </p>
+          <p class="role-card-tags"></p>
+          <p class="role-card-hint" aria-hidden="true">Move away or press Esc to close</p>
+        </div>
       </div>
     </section>
 

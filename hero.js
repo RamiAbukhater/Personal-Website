@@ -1,392 +1,898 @@
-// Hero animation: floating nodes gradually link up into a slowly rotating 3D brain.
-// Plain JavaScript + <canvas>, no libraries.
+// Hero: a small floating sandstone town in the style of Chants of Sennaar, seen
+// from above. Each current project has its own little landmark on the island,
+// with a clickable marker that jumps to its card further down the page.
+// Uses three.js (loaded from a CDN through the import map in index.html).
+
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const canvas = document.querySelector("canvas");
-const ctx = canvas.getContext("2d");
+const markerLayer = document.querySelector(".map-markers");
+const hero = document.querySelector(".hero");
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = matchMedia("(pointer: fine)").matches;
 
-const COLOR = "0, 255, 204";
-const BUILD_SECONDS = 10; // time for every edge to start linking up
-const TRAVEL_SECONDS = 3; // time for a node to glide into place
-const EDGE_FADE = 1.5; // time for an edge to fade in
-const PARTICLE_FADE_IN = 2.5; // time for the loose particles to appear when the page opens
-const SPIN = 0.3; // radians per second
-const TILT = 0.22; // look down on the brain slightly
-const CAMERA = 2.8; // camera distance, in brain lengths
-const LIGHT = [-0.41, 0.58, 0.7]; // from the upper left, towards the viewer
-const SHADES = 16; // brightness levels used when drawing
+// Warm, chalky palette: sandstone, whitewash, terracotta and a little teal
+const C = {
+  sand: 0xecd9b6,
+  paving: 0xe2c9a0,
+  stone: 0xd6bd96,
+  asphalt: 0x9d9087,
+  cliff: 0xd9ad7f,
+  cliffDark: 0xb8805c,
+  rock: 0xa86f52,
+  wall: 0xf6eddd,
+  wallShade: 0xeadbc1,
+  enamel: 0xfffbf3,
+  terracotta: 0xcc7650,
+  red: 0xb0493a,
+  teal: 0x7fb5aa,
+  water: 0x8fcac4,
+  leaf: 0x94a866,
+  cypress: 0x667f57,
+  wood: 0x9a6a48,
+  gold: 0xe0aa45,
+  dark: 0x4a3530,
+  cloud: 0xfffaf0,
+};
 
-// --- The brain surface ---
-// Model space: x = left/right, y = up, z = front/back. The brain is 1 unit long.
+// --- Projects on the island ---
+// Each project gets a landmark, a spot on the island, and the id of its card.
+// To change what a project looks like, swap its `build` function.
+const PROJECTS = [
+  { card: "card-procrastination", title: "Why We Procrastinate", at: [-2.0, 2.9, -2.0], build: clockTower },
+  { card: "card-assistant-axis", title: "AI Interpretability Lab", at: [-5.4, 0, 3.2], build: assistantAxis },
+  { card: "card-alignment", title: "AI Alignment Fellowship", at: [-3.6, 1.4, 0.4], build: readingTemple },
+  { card: "card-social-adjacency", title: "The Social Adjacency of LLMs", at: [0.5, 0, 5.0], build: socialCircle },
+  { card: "card-selene", title: "Selene Nanorobotics", at: [4.6, 0, 2.8], build: toothMonument },
+  { card: "card-triton", title: "Triton AI", at: [5.6, 0, -0.4], build: testTrack },
+  { card: "card-audio", title: "Audio-Perception Lab", at: [3.0, 0.9, -5.2], build: soundTower },
+];
 
-// Distance from the centre to the surface of the cerebrum in direction (dx, dy, dz)
-// Half-width, half-height and half-length of the cerebrum, based on a real
-// brain's proportions (roughly 167 mm long, 140 mm wide, 93 mm tall)
-function cerebrumAxes(dy, dz) {
-  const a = 0.42 * (1 - 0.12 * dz); // narrower at the front than the back
-  // Domed on top, flatter underneath, and shallowest at the back,
-  // where the cerebrum sits on top of the cerebellum
-  const b = dy > 0 ? 0.33 : 0.2 + 0.04 * dz;
-  return [a, b, 0.5];
-}
+// Things that move: each is called every frame with the time in seconds
+const tickers = [];
 
-function cerebrumRadius(dx, dy, dz) {
-  const [a, b, c] = cerebrumAxes(dy, dz);
-  let r = 1 / Math.hypot(dx / a, dy / b, dz / c);
-  // Temporal lobes: a bulge low on each side
-  if (dy < 0) {
-    r *= 1 + 0.35 * Math.min(1, -dy * 2) * Math.abs(dx) * Math.exp(-(((dz - 0.15) / 0.4) ** 2));
+// --- Small building blocks ---
+
+const materials = new Map();
+function material(color) {
+  if (!materials.has(color)) {
+    materials.set(color, new THREE.MeshLambertMaterial({ color, flatShading: true }));
   }
-  // Longitudinal fissure: the groove between the two hemispheres
-  r *= 1 - 0.14 * Math.exp(-((dx / 0.08) ** 2));
-  return r;
+  return materials.get(color);
 }
 
-// Winding fold pattern, mirrored across the two hemispheres.
-// Values near zero are sulci (grooves); everything else is gyri (ridges).
-function folds(x, y, z) {
-  const k = 21;
-  x = Math.abs(x);
-  return (
-    (Math.sin(k * x + 2 * Math.sin(k * 0.6 * y + 1) + 2 * Math.sin(k * 0.5 * z)) +
-      Math.sin(k * 0.9 * y + 2 * Math.sin(k * 0.55 * z + 2) + 2 * Math.sin(k * 0.6 * x + 0.5)) +
-      Math.sin(k * 0.8 * z + 2 * Math.sin(k * 0.5 * x + 4) + 2 * Math.sin(k * 0.6 * y))) /
-    3
+function mesh(geometry, color) {
+  return new THREE.Mesh(geometry, Array.isArray(color) ? color.map(material) : material(color));
+}
+
+// A mesh that glows softly in its own colour
+function glow(geometry, color) {
+  return new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color, emissive: color, emissiveIntensity: 0.7, flatShading: true }));
+}
+
+// A see-through mesh whose opacity gets animated (sweeps, sound rings)
+function ghost(geometry, color) {
+  return new THREE.Mesh(
+    geometry,
+    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }),
   );
 }
-const SULCUS = 0.11;
 
-function insideCerebrum(x, y, z) {
-  const d = Math.hypot(x, y, z);
-  return d < cerebrumRadius(x / d, y / d, z / d);
+function at(object, x, y, z) {
+  object.position.set(x, y, z);
+  return object;
 }
 
-const CEREBELLUM = { y: -0.25, z: -0.25, a: 0.28, b: 0.13, c: 0.17 };
-
-function insideCerebellum(x, y, z) {
-  const { y: cy, z: cz, a, b, c } = CEREBELLUM;
-  return Math.hypot(x / a, (y - cy) / b, (z - cz) / c) < 1;
+function box(w, h, d, color) {
+  return mesh(new THREE.BoxGeometry(w, h, d), color);
 }
 
-function randomDirection() {
-  const y = Math.random() * 2 - 1;
-  const angle = Math.random() * Math.PI * 2;
-  const r = Math.sqrt(1 - y * y);
-  return [r * Math.cos(angle), y, r * Math.sin(angle)];
+function cylinder(rTop, rBottom, h, sides, color) {
+  return mesh(new THREE.CylinderGeometry(rTop, rBottom, h, sides), color);
 }
 
-// Random point on the cerebrum, or null if it lands in a sulcus
-function cerebrumPoint() {
-  const [dx, dy, dz] = randomDirection();
-  const r = cerebrumRadius(dx, dy, dz);
-  const fold = Math.abs(folds(dx * r, dy * r, dz * r));
-  if (fold < SULCUS) return null;
-  const bulge = r * (1 + 0.03 * Math.min(1, fold * 3)); // gyri stand slightly proud
-  const [a, b, c] = cerebrumAxes(dy, dz);
-  return {
-    x: dx * bulge, y: dy * bulge, z: dz * bulge,
-    normal: [dx / a ** 2, dy / b ** 2, dz / c ** 2],
-    cerebrum: true,
-  };
+function sphere(r, color) {
+  return mesh(new THREE.SphereGeometry(r, 8, 6), color);
 }
 
-// Random point on the cerebellum, striped with fine horizontal folds
-function cerebellumPoint() {
-  const { y: cy, z: cz, a, b, c } = CEREBELLUM;
-  const [dx, dy, dz] = randomDirection();
-  const groove = 1 - 0.1 * Math.exp(-((dx / 0.12) ** 2));
-  const x = dx * a * groove;
-  const y = cy + dy * b * groove;
-  const z = cz + dz * c * groove;
-  if (Math.sin(y * 95) < -0.3 || insideCerebrum(x, y, z)) return null;
-  return { x, y, z, normal: [dx / a, dy / b, dz / c] };
+function dome(r, color) {
+  return mesh(new THREE.SphereGeometry(r, 10, 5, 0, Math.PI * 2, 0, Math.PI / 2), color);
 }
 
-// Random point on the brainstem: a short, thick tube running down and back,
-// swelling at the pons and tapering towards the spinal cord
-function brainstemPoint() {
-  const t = Math.random();
-  const angle = Math.random() * Math.PI * 2;
-  const radius = 0.08 - 0.03 * t + 0.02 * Math.exp(-(((t - 0.3) / 0.2) ** 2));
-  const x = Math.cos(angle) * radius;
-  const y = -0.14 - 0.3 * t;
-  const z = -0.08 - 0.07 * t + Math.sin(angle) * radius;
-  if (insideCerebrum(x, y, z) || insideCerebellum(x, y, z)) return null;
-  return { x, y, z, normal: [Math.cos(angle), 0, Math.sin(angle)] };
+function group(...children) {
+  const g = new THREE.Group();
+  g.add(...children);
+  return g;
 }
 
-// --- Build the brain graph: where each node ends up, and which nodes connect ---
+// An arched opening (door or window): a dark slab with a round top, built to
+// sit on a +z face with its bottom at y = 0. Rotate it to use on other faces.
+function arch(w, h, color = C.dark) {
+  const top = cylinder(w / 2, w / 2, 0.04, 10, color);
+  top.rotation.x = Math.PI / 2;
+  return group(at(box(w, h - w / 2, 0.04, color), 0, (h - w / 2) / 2, 0), at(top, 0, h - w / 2, 0));
+}
 
-const shape = []; // final position and surface normal of each node
+// Same as arch(), turned to sit on the +x face
+function sideArch(w, h, color) {
+  const a = arch(w, h, color);
+  a.rotation.y = Math.PI / 2;
+  return a;
+}
 
-// Scatter nodes over a surface, kept a minimum distance apart
-function scatter(samplePoint, spacing, tries) {
-  const start = shape.length;
-  for (let t = 0; t < tries; t++) {
-    const p = samplePoint();
-    if (!p) continue;
-    let crowded = false;
-    for (let i = start; i < shape.length && !crowded; i++) {
-      crowded = Math.hypot(shape[i].x - p.x, shape[i].y - p.y, shape[i].z - p.z) < spacing;
+// A flat picture that always faces the camera, drawn on a little canvas
+function sprite(draw, size) {
+  const c = document.createElement("canvas");
+  c.width = c.height = 128;
+  draw(c.getContext("2d"));
+  const texture = new THREE.CanvasTexture(c);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+  s.scale.setScalar(size);
+  return s;
+}
+
+function letter(text) {
+  return sprite((ctx) => {
+    ctx.font = "italic bold 84px Georgia, serif";
+    ctx.fillStyle = "#4a3530";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, 64, 64);
+  }, 0.3);
+}
+
+// A speech bubble with "..." inside
+function speechBubble(fill = "#fffaf0") {
+  return sprite((ctx) => {
+    ctx.fillStyle = fill;
+    ctx.strokeStyle = "#4a3530";
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.roundRect(10, 18, 108, 70, 30);
+    ctx.moveTo(40, 86);
+    ctx.lineTo(34, 116);
+    ctx.lineTo(62, 86);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = fill;
+    ctx.fillRect(40, 80, 20, 10); // hide the stroke where the tail joins
+    ctx.fillStyle = "#4a3530";
+    for (const x of [42, 64, 86]) {
+      ctx.beginPath();
+      ctx.arc(x, 53, 7, 0, Math.PI * 2);
+      ctx.fill();
     }
-    if (crowded) continue;
-    const length = Math.hypot(...p.normal);
-    p.normal = p.normal.map((n) => n / length);
-    shape.push(p);
+  }, 0.5);
+}
+
+// Smooth noise around a circle, so rock edges wobble but still meet at the seam
+function edgeNoise(angle, seed) {
+  return 0.6 * Math.sin(3 * angle + seed) + 0.4 * Math.sin(5 * angle + seed * 2.3);
+}
+
+// Small fixed jitter per vertex position, so shared vertices move together
+function hash(x, y, z) {
+  const s = Math.sin(Math.round(x * 100) * 12.9898 + Math.round(y * 100) * 78.233 + Math.round(z * 100) * 37.719) * 43758.5453;
+  return s - Math.floor(s) - 0.5;
+}
+
+// Rough up a round shape: push each vertex in or out with the angle around it
+function rockify(geometry, amount, seed, wobble = 0) {
+  const pos = geometry.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i);
+    const k = 1 + amount * edgeNoise(Math.atan2(v.z, v.x), seed) + wobble * hash(v.x, v.y, v.z);
+    pos.setXYZ(i, v.x * k, v.y + wobble * hash(v.z, v.x, v.y), v.z * k);
   }
+  geometry.computeVertexNormals();
+  return geometry;
 }
 
-scatter(cerebrumPoint, 0.055, 16000);
-scatter(cerebellumPoint, 0.042, 5000);
-scatter(brainstemPoint, 0.048, 1500);
-
-const edges = []; // [a, b] index pairs
-const edgeKeys = new Set();
-
-function addEdge(a, b) {
-  const key = a < b ? `${a}-${b}` : `${b}-${a}`;
-  if (edgeKeys.has(key)) return;
-  edgeKeys.add(key);
-  edges.push([a, b]);
+// A flat-topped rock terrace, from below the ground up to `top`
+const terraces = [];
+function terrace(x, z, r, top, seed, bottom = -0.6) {
+  const geometry = rockify(new THREE.CylinderGeometry(r, r * 0.94, top - bottom, 15, 2), 0.06, seed);
+  terraces.push({ x, z, r, seed });
+  return at(mesh(geometry, [C.cliff, C.sand, C.cliff]), x, (top + bottom) / 2, z);
 }
 
-// Each node links to its three nearest neighbours, but never across a sulcus,
-// so the grooves show up as dark winding gaps in the mesh
-shape.forEach((p, i) => {
-  const nearest = [];
-  shape.forEach((q, j) => {
-    if (i === j) return;
-    const d = Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
-    if (d > 0.12) return;
-    if (p.cerebrum && q.cerebrum) {
-      const fold = folds((p.x + q.x) / 2, (p.y + q.y) / 2, (p.z + q.z) / 2);
-      if (Math.abs(fold) < SULCUS * 0.8) return;
+// Distance from a terrace's centre to its rough edge, in a given direction
+function edgeRadius({ r, seed }, angle) {
+  return r * (1 + 0.06 * edgeNoise(angle, seed));
+}
+
+// A run of solid steps climbing towards local -z
+function stairs(steps, rise, run, width, color = C.stone) {
+  const g = new THREE.Group();
+  for (let i = 0; i < steps; i++) {
+    const h = rise * (i + 1);
+    g.add(at(box(width, h, run, color), 0, h / 2, -i * run));
+  }
+  return g;
+}
+
+// A flat strip of paving from one point to another
+function path(x1, z1, x2, z2, width = 0.55, color = C.paving) {
+  const strip = box(width, 0.04, Math.hypot(x2 - x1, z2 - z1) + width, color);
+  strip.rotation.y = Math.atan2(x2 - x1, z2 - z1);
+  return at(strip, (x1 + x2) / 2, 0.02, (z1 + z2) / 2);
+}
+
+function cypress(scale = 1) {
+  const tree = mesh(new THREE.OctahedronGeometry(0.28, 0), C.cypress);
+  tree.scale.set(1, 3, 1);
+  const g = group(at(cylinder(0.05, 0.06, 0.3, 5, C.wood), 0, 0.15, 0), at(tree, 0, 0.95, 0));
+  g.scale.setScalar(scale);
+  return g;
+}
+
+function roundTree(scale = 1) {
+  const crown = mesh(new THREE.IcosahedronGeometry(0.42, 0), C.leaf);
+  crown.scale.y = 0.85;
+  const g = group(at(cylinder(0.06, 0.08, 0.5, 5, C.wood), 0, 0.25, 0), at(crown, 0, 0.75, 0));
+  g.scale.setScalar(scale);
+  return g;
+}
+
+function bush(scale = 1) {
+  const b = mesh(new THREE.IcosahedronGeometry(0.22, 0), C.leaf);
+  b.scale.set(scale, scale * 0.7, scale);
+  b.position.y = 0.1 * scale;
+  return b;
+}
+
+function banner(color = C.red) {
+  const cloth = box(0.02, 0.5, 0.22, color);
+  return group(at(cylinder(0.02, 0.02, 1.2, 4, C.wood), 0, 0.6, 0), at(cloth, 0, 0.9, 0.12));
+}
+
+// A little robed figure
+function person(robe = C.red) {
+  return group(at(cylinder(0.06, 0.11, 0.28, 6, robe), 0, 0.14, 0), at(sphere(0.07, C.wall), 0, 0.34, 0));
+}
+
+function house(w, h, d, roof = C.wall) {
+  return group(
+    at(box(w, h, d, C.wall), 0, h / 2, 0),
+    at(box(w + 0.08, 0.1, d + 0.08, roof), 0, h + 0.05, 0),
+    at(arch(0.22, 0.42), 0, 0, d / 2 + 0.01),
+    at(sideArch(0.14, 0.22), w / 2 + 0.01, h * 0.55, 0),
+  );
+}
+
+// Something that eases in and out over and over: 0 → 1 → 0 across each cycle
+function pulse(t) {
+  return Math.sin(Math.PI * (((t % 1) + 1) % 1));
+}
+
+// --- Project landmarks ---
+
+// Why We Procrastinate: a clock tower crowned with an hourglass, its hands
+// turning while time slips away
+function clockTower() {
+  const g = group(
+    at(box(1.4, 1.5, 1.4, C.wall), 0, 0.75, 0),
+    at(arch(0.4, 0.8), 0, 0, 0.71),
+    at(sideArch(0.4, 0.8), 0.71, 0, 0),
+    at(box(1.55, 0.12, 1.55, C.terracotta), 0, 1.56, 0),
+    at(cylinder(0.5, 0.58, 1.6, 8, C.wall), 0, 2.42, 0),
+    at(cylinder(0.64, 0.64, 0.1, 8, C.red), 0, 3.25, 0),
+    at(box(0.95, 0.95, 0.95, C.wallShade), 0, 3.78, 0),
+  );
+  // Narrow windows around the octagonal drum
+  for (const angle of [0, Math.PI / 2, Math.PI, -Math.PI / 2]) {
+    const side = group(at(arch(0.12, 0.3), 0, 0, 0.53));
+    side.rotation.y = angle;
+    g.add(at(side, 0, 2.2, 0));
+  }
+  const roof = mesh(new THREE.ConeGeometry(0.85, 1.1, 4), C.terracotta);
+  roof.rotation.y = Math.PI / 4;
+  g.add(at(roof, 0, 4.8, 0));
+
+  // Clock faces on all four sides
+  const hands = [];
+  for (const angle of [0, Math.PI / 2, Math.PI, -Math.PI / 2]) {
+    const face = cylinder(0.32, 0.32, 0.04, 14, C.enamel);
+    face.rotation.x = Math.PI / 2;
+    const rim = cylinder(0.36, 0.36, 0.03, 14, C.gold);
+    rim.rotation.x = Math.PI / 2;
+    const clock = group(rim, at(face, 0, 0, 0.01));
+    for (const [length, speed] of [[0.26, 0.8], [0.18, 0.07]]) {
+      const pivot = at(group(at(box(0.04, length, 0.02, C.dark), 0, length / 2, 0)), 0, 0, 0.04);
+      hands.push([pivot, speed]);
+      clock.add(pivot);
     }
-    nearest.push([d, j]);
+    const side = group(at(clock, 0, 0, 0.49));
+    side.rotation.y = angle;
+    g.add(at(side, 0, 3.8, 0));
+  }
+
+  // The hourglass on top, turning over every so often
+  const glass = new THREE.Group();
+  const bulb = (flip) => {
+    const cone = mesh(new THREE.ConeGeometry(0.2, 0.28, 8), C.enamel);
+    if (flip) cone.rotation.x = Math.PI;
+    return cone;
+  };
+  glass.add(
+    at(cylinder(0.24, 0.24, 0.05, 8, C.wood), 0, -0.33, 0),
+    at(cylinder(0.24, 0.24, 0.05, 8, C.wood), 0, 0.33, 0),
+    at(bulb(false), 0, -0.16, 0),
+    at(bulb(true), 0, 0.16, 0),
+    at(mesh(new THREE.ConeGeometry(0.13, 0.14, 8), C.gold), 0, -0.23, 0),
+  );
+  for (const a of [0, (Math.PI * 2) / 3, (Math.PI * 4) / 3]) {
+    glass.add(at(cylinder(0.02, 0.02, 0.62, 4, C.wood), Math.cos(a) * 0.21, 0, Math.sin(a) * 0.21));
+  }
+  g.add(at(glass, 0, 5.75, 0));
+
+  tickers.push((t) => {
+    for (const [pivot, speed] of hands) pivot.rotation.z = -t * speed;
+    // Rest for a while, then flip over in one smooth turn
+    const cycle = (t / 6) % 1;
+    const flip = Math.floor(t / 6) + Math.min(1, Math.max(0, (cycle - 0.85) / 0.15));
+    glass.rotation.z = flip * Math.PI;
   });
-  nearest
-    .sort((a, b) => a[0] - b[0])
-    .slice(0, 3)
-    .forEach(([, j]) => addEdge(i, j));
+  return g;
+}
+
+// ...and at its foot, someone napping in a hammock beside a pile of unfinished work
+function hammock() {
+  const cloth = mesh(new THREE.TorusGeometry(0.62, 0.07, 4, 12, Math.PI), C.red);
+  cloth.rotation.z = Math.PI;
+  cloth.scale.set(1, 0.45, 2.4);
+  const sleeper = person(C.teal);
+  sleeper.rotation.z = Math.PI / 2;
+  const g = group(
+    at(roundTree(0.95), -0.78, 0, 0),
+    at(roundTree(0.85), 0.78, 0, 0),
+    at(cloth, 0, 0.66, 0),
+    at(sleeper, 0.18, 0.44, 0),
+    // The to-do pile: stacked papers and a crate
+    at(box(0.32, 0.26, 0.26, C.wood), 0.55, 0.13, 0.55),
+    at(box(0.28, 0.08, 0.22, C.enamel), 0.55, 0.3, 0.55),
+    at(box(0.26, 0.08, 0.2, C.wallShade), 0.57, 0.38, 0.53),
+    at(box(0.28, 0.08, 0.22, C.enamel), 0.54, 0.46, 0.56),
+  );
+  const zs = [letter("z"), letter("z"), letter("Z")];
+  zs.forEach((z) => g.add(z));
+  tickers.push((t) => {
+    zs.forEach((z, i) => {
+      const p = (t * 0.35 + i / 3) % 1;
+      z.position.set(-0.1 + p * 0.35 + Math.sin(p * 6) * 0.06, 0.65 + p * 0.9, 0);
+      z.material.opacity = pulse(p);
+      z.scale.setScalar(0.18 + p * 0.18);
+    });
+  });
+  return g;
+}
+
+// AI Interpretability Lab: an observatory peering down a paved axis lined with
+// personas, running from the drifting ones to the Assistant in gold at the far
+// end, with a rope across the axis to cap the drift
+function assistantAxis() {
+  const scope = cylinder(0.08, 0.11, 0.95, 8, C.gold);
+  scope.rotation.z = -1.1; // aimed down the axis
+  const g = group(
+    at(cylinder(0.8, 0.85, 0.9, 12, C.wall), 0, 0.45, 0),
+    at(cylinder(0.88, 0.88, 0.08, 12, C.terracotta), 0, 0.94, 0),
+    at(dome(0.8, C.teal), 0, 0.98, 0),
+    at(scope, 0.55, 1.5, 0),
+    at(arch(0.3, 0.6), 0, 0, 0.83),
+    at(sideArch(0.3, 0.6), 0.83, 0, 0),
+    at(box(3.3, 0.04, 0.5, C.paving), 2.6, 0.02, 0),
+  );
+  // Tick marks along the axis, like a ruler
+  for (let x = 1.1; x < 4.2; x += 0.3) g.add(at(box(0.04, 0.05, 0.5, C.stone), x, 0.03, 0));
+
+  const personas = [C.dark, C.red, C.terracotta, C.teal];
+  personas.forEach((robe, i) => {
+    const x = 1.3 + i * 0.5;
+    g.add(at(cylinder(0.14, 0.16, 0.12, 8, C.stone), x, 0.06, 0), at(person(robe), x, 0.12, 0));
+  });
+  // The cap: a rope strung between two posts
+  g.add(
+    at(cylinder(0.04, 0.04, 0.5, 5, C.wood), 3.25, 0.25, 0.32),
+    at(cylinder(0.04, 0.04, 0.5, 5, C.wood), 3.25, 0.25, -0.32),
+    at(box(0.03, 0.03, 0.64, C.red), 3.25, 0.44, 0),
+  );
+  // The Assistant: taller, in gold, with a glowing halo
+  const halo = glow(new THREE.TorusGeometry(0.12, 0.025, 4, 14), C.gold);
+  halo.rotation.x = Math.PI / 2;
+  const assistant = person(C.gold);
+  assistant.scale.setScalar(1.35);
+  g.add(at(cylinder(0.18, 0.2, 0.16, 8, C.enamel), 3.8, 0.08, 0), at(assistant, 3.8, 0.16, 0), at(halo, 3.8, 0.75, 0));
+  tickers.push((t) => {
+    halo.position.y = 0.75 + Math.sin(t * 2) * 0.04;
+  });
+  return g;
+}
+
+// AI Alignment Fellowship: a round reading temple with eight columns, one for
+// each week, where a speaker at a lectern talks to a small circle of fellows
+function readingTemple() {
+  const g = group(
+    at(cylinder(0.98, 1.04, 0.18, 16, C.stone), 0, 0.09, 0),
+    at(cylinder(0.86, 0.86, 0.04, 16, C.wallShade), 0, 0.2, 0),
+    at(cylinder(0.94, 0.94, 0.14, 16, C.terracotta), 0, 1.29, 0),
+    at(dome(0.7, C.teal), 0, 1.36, 0),
+    at(sphere(0.07, C.gold), 0, 2.1, 0),
+    at(box(0.22, 0.34, 0.14, C.wood), 0, 0.39, -0.25),
+    at(person(C.gold), 0, 0.22, -0.48),
+    at(banner(C.teal), 0.95, 0, 0.6),
+  );
+  const book = box(0.2, 0.03, 0.15, C.red);
+  book.rotation.x = 0.4;
+  g.add(at(book, 0, 0.58, -0.22));
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
+    g.add(at(cylinder(0.065, 0.08, 1.0, 6, C.wall), Math.cos(a) * 0.74, 0.72, Math.sin(a) * 0.74));
+  }
+  for (const [x, z, robe] of [[-0.3, 0.15, C.red], [0.3, 0.15, C.teal], [0, 0.35, C.wall]]) {
+    const fellow = person(robe);
+    fellow.scale.setScalar(0.8);
+    g.add(at(fellow, x, 0.22, z));
+  }
+  // Reading lists stacked by the steps
+  for (const [x, z] of [[-0.95, 0.55], [-1.05, 0.25]]) {
+    [C.red, C.teal, C.gold, C.enamel].forEach((color, i) => {
+      const b = box(0.24, 0.06, 0.18, color);
+      b.rotation.y = i * 0.3;
+      g.add(at(b, x, 0.03 + i * 0.06, z));
+    });
+  }
+  return g;
+}
+
+// The Social Adjacency of LLMs: villagers sitting in a circle with a small
+// glowing AI among them, speech bubbles passing back and forth
+function socialCircle() {
+  const g = group(
+    at(cylinder(1.25, 1.25, 0.04, 14, C.paving), 0, 0.02, 0),
+    at(cylinder(0.25, 0.28, 0.12, 8, C.stone), 0, 0.06, 0),
+    at(glow(new THREE.OctahedronGeometry(0.12, 0), C.gold), 0, 0.3, 0),
+    at(house(0.9, 0.8, 0.8, C.terracotta), -1.75, 0, -0.6),
+    at(house(0.8, 1.2, 0.8), 1.75, 0, -0.7),
+    at(house(0.9, 0.7, 0.8, C.wallShade), -1.3, 0, 1.45),
+    at(house(0.7, 0.9, 0.7, C.terracotta), 1.35, 0, 1.4),
+    at(dome(0.25, C.teal), 1.75, 1.3, -0.7),
+  );
+  const seats = 6;
+  const speakers = [];
+  for (let i = 0; i < seats; i++) {
+    const a = (i / seats) * Math.PI * 2;
+    const x = Math.cos(a) * 0.8;
+    const z = Math.sin(a) * 0.8;
+    g.add(at(box(0.26, 0.08, 0.2, C.wood), x, 0.04, z).rotateY(-a));
+    let figure;
+    if (i === 1) {
+      // The language model: a whitewashed pillar with a glowing teal head
+      figure = group(at(cylinder(0.07, 0.1, 0.3, 6, C.enamel), 0, 0.15, 0), at(glow(new THREE.IcosahedronGeometry(0.09, 0), C.teal), 0, 0.38, 0));
+    } else {
+      figure = person([C.red, null, C.gold, C.teal, C.wall, C.terracotta][i]);
+    }
+    g.add(at(figure, x, 0.08, z));
+    speakers.push([x, z]);
+  }
+  // Bubbles take turns: the AI answers every other line
+  const bubbles = [0, 1, 3, 1, 4, 1].map((seat, turn) => {
+    const bubble = speechBubble(seat === 1 ? "#cfe7e1" : "#fffaf0");
+    bubble.userData = { seat, turn };
+    g.add(bubble);
+    return bubble;
+  });
+  tickers.push((t) => {
+    for (const bubble of bubbles) {
+      const { seat, turn } = bubble.userData;
+      const p = (t / 1.6 - turn) / bubbles.length; // each line gets 1.6 s
+      const local = ((p % 1) + 1) % 1;
+      const shown = local < 1 / bubbles.length ? pulse(local * bubbles.length) : 0;
+      const [x, z] = speakers[seat];
+      bubble.position.set(x, 0.75 + shown * 0.15, z);
+      bubble.material.opacity = Math.min(1, shown * 2.5);
+    }
+  });
+  return g;
+}
+
+// Selene Nanorobotics: a monument to a molar, with a tiny gold microrobot
+// spiralling around inside its root, steered by a big horseshoe magnet and
+// watched by sensors at each corner of the plinth
+function toothMonument() {
+  const g = group(
+    at(box(1.7, 0.3, 1.7, C.stone), 0, 0.15, 0),
+    at(box(1.5, 0.06, 1.5, C.wallShade), 0, 0.33, 0),
+    at(cylinder(0.58, 0.48, 0.7, 10, C.enamel), 0, 1.8, 0),
+  );
+  for (const x of [-0.24, 0.24]) {
+    const root = mesh(new THREE.CylinderGeometry(0.2, 0.08, 1.15, 8), C.enamel);
+    root.rotation.z = x * 0.6;
+    g.add(at(root, x * 1.1, 0.92, 0));
+  }
+  for (const [x, z] of [[0.24, 0.24], [-0.24, 0.24], [0.24, -0.24], [-0.24, -0.24]]) {
+    const cusp = sphere(0.24, C.enamel);
+    cusp.scale.y = 0.7;
+    g.add(at(cusp, x, 2.17, z));
+  }
+  // Sensors on the plinth corners, each with a glowing eye
+  for (const [x, z] of [[0.7, 0.7], [-0.7, 0.7], [0.7, -0.7], [-0.7, -0.7]]) {
+    g.add(at(box(0.16, 0.22, 0.16, C.dark), x, 0.47, z), at(glow(new THREE.OctahedronGeometry(0.06, 0), C.teal), x, 0.65, z));
+  }
+  // The horseshoe magnet, red with white poles, rocking gently
+  const magnet = group(
+    mesh(new THREE.TorusGeometry(0.32, 0.09, 6, 12, Math.PI), C.red),
+    at(box(0.18, 0.2, 0.18, C.enamel), 0.32, -0.1, 0),
+    at(box(0.18, 0.2, 0.18, C.enamel), -0.32, -0.1, 0),
+  );
+  magnet.rotation.z = -Math.PI / 2; // poles pointing at the tooth
+  g.add(at(cylinder(0.04, 0.05, 1.1, 5, C.wood), 1.3, 0.55, 0), at(magnet, 1.3, 1.25, 0));
+
+  // The microrobot, climbing a spiral around one root and back down
+  const robot = glow(new THREE.SphereGeometry(0.08, 8, 6), C.gold);
+  g.add(robot);
+  tickers.push((t) => {
+    const p = pulse(t * 0.12);
+    const a = t * 3;
+    robot.position.set(0.26 + Math.cos(a) * 0.3, 0.45 + p * 0.95, Math.sin(a) * 0.3);
+    magnet.rotation.x = Math.sin(t * 0.8) * 0.25;
+  });
+  return g;
+}
+
+// Triton AI: an autonomous car lapping a little test track, its LiDAR spinning
+// and sending sweep rings out across the ground
+function testTrack() {
+  const a = 1.25; // track radius across x
+  const b = 1.9; // track radius across z
+  const g = new THREE.Group();
+  const segments = 36;
+  for (let i = 0; i < segments; i++) {
+    const t0 = (i / segments) * Math.PI * 2;
+    const t1 = ((i + 1) / segments) * Math.PI * 2;
+    const [x0, z0, x1, z1] = [a * Math.cos(t0), b * Math.sin(t0), a * Math.cos(t1), b * Math.sin(t1)];
+    const length = Math.hypot(x1 - x0, z1 - z0);
+    const angle = Math.atan2(x1 - x0, z1 - z0);
+    const road = at(box(0.5, 0.05, length + 0.03, C.asphalt), (x0 + x1) / 2, 0.025, (z0 + z1) / 2);
+    road.rotation.y = angle;
+    g.add(road);
+    if (i % 2 === 0) {
+      const dash = at(box(0.05, 0.02, length * 0.6, C.enamel), (x0 + x1) / 2, 0.055, (z0 + z1) / 2);
+      dash.rotation.y = angle;
+      g.add(dash);
+    }
+  }
+  // The team's garage in the infield, with traffic cones out front
+  g.add(
+    at(box(0.9, 0.55, 0.7, C.wall), 0, 0.28, -0.5),
+    at(box(0.98, 0.08, 0.78, C.teal), 0, 0.6, -0.5),
+    at(box(0.55, 0.38, 0.04, C.dark), 0, 0.19, -0.14),
+    at(banner(C.gold), 0.45, 0, 0.6),
+  );
+  for (const [x, z] of [[-0.3, 0.35], [0, 0.55], [0.3, 0.35]]) {
+    g.add(at(mesh(new THREE.ConeGeometry(0.07, 0.2, 6), C.terracotta), x, 0.1, z));
+  }
+
+  // The car: body, cabin, wheels, cameras front and back, and a LiDAR puck
+  const lidar = group(at(cylinder(0.07, 0.08, 0.09, 10, C.dark), 0, 0, 0), at(box(0.04, 0.03, 0.02, C.teal), 0, 0, 0.075));
+  const car = group(
+    at(box(0.34, 0.14, 0.62, C.enamel), 0, 0.14, 0),
+    at(box(0.3, 0.14, 0.32, C.teal), 0, 0.28, -0.03),
+    at(box(0.12, 0.05, 0.03, C.dark), 0, 0.22, 0.32),
+    at(box(0.12, 0.05, 0.03, C.dark), 0, 0.22, -0.32),
+    at(lidar, 0, 0.4, -0.03),
+  );
+  for (const [x, z] of [[0.17, 0.2], [-0.17, 0.2], [0.17, -0.2], [-0.17, -0.2]]) {
+    const wheel = cylinder(0.08, 0.08, 0.06, 8, C.dark);
+    wheel.rotation.z = Math.PI / 2;
+    car.add(at(wheel, x, 0.08, z));
+  }
+  g.add(car);
+
+  // LiDAR sweeps: rings that spread out from the car and fade
+  const sweeps = [0, 0.5].map((offset) => {
+    const ring = ghost(new THREE.RingGeometry(0.92, 1, 40), C.teal);
+    ring.rotation.x = -Math.PI / 2;
+    ring.userData.offset = offset;
+    g.add(ring);
+    return ring;
+  });
+
+  tickers.push((t) => {
+    const theta = t * 0.4;
+    car.position.set(a * Math.cos(theta), 0.05, b * Math.sin(theta));
+    car.rotation.y = Math.atan2(-a * Math.sin(theta), b * Math.cos(theta));
+    lidar.rotation.y = t * 8;
+    for (const ring of sweeps) {
+      const p = (t * 0.7 + ring.userData.offset) % 1;
+      ring.position.set(car.position.x, 0.08, car.position.z);
+      ring.scale.setScalar(0.2 + p * 1.6);
+      ring.material.opacity = 0.55 * (1 - p);
+    }
+  });
+  return g;
+}
+
+// Audio-Perception Lab: a bell tower ringing out sound waves, beside a little
+// spectrogram whose bars dance to the sound
+function soundTower() {
+  const g = group(
+    at(box(0.8, 1.6, 0.8, C.wall), 0, 0.8, 0),
+    at(arch(0.26, 0.5), 0, 0, 0.41),
+    at(sideArch(0.16, 0.3), 0.41, 1.0, 0),
+    at(box(0.9, 0.1, 0.9, C.terracotta), 0, 1.65, 0),
+    at(box(0.9, 0.1, 0.9, C.terracotta), 0, 2.35, 0),
+  );
+  for (const [x, z] of [[0.36, 0.36], [-0.36, 0.36], [0.36, -0.36], [-0.36, -0.36]]) {
+    g.add(at(box(0.12, 0.6, 0.12, C.wall), x, 2.0, z));
+  }
+  const bell = group(at(cylinder(0.12, 0.2, 0.28, 8, C.gold), 0, -0.2, 0), at(sphere(0.05, C.dark), 0, -0.36, 0));
+  g.add(at(bell, 0, 2.28, 0));
+  const roof = mesh(new THREE.ConeGeometry(0.66, 0.8, 4), C.terracotta);
+  roof.rotation.y = Math.PI / 4;
+  g.add(at(roof, 0, 2.8, 0));
+
+  // Sound waves rolling out from the belfry
+  const waves = [0, 1 / 3, 2 / 3].map((offset) => {
+    const ring = ghost(new THREE.TorusGeometry(1, 0.025, 4, 40), C.gold);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = 2.05;
+    ring.userData.offset = offset;
+    g.add(ring);
+    return ring;
+  });
+
+  // The spectrogram: a stand of bars, teal fading to gold
+  const bars = [];
+  g.add(at(box(1.35, 0.1, 0.36, C.stone), 0.1, 0.05, 0.95));
+  for (let i = 0; i < 8; i++) {
+    const bar = box(0.12, 1, 0.12, new THREE.Color(C.teal).lerp(new THREE.Color(C.gold), i / 7).getHex());
+    bars.push(bar);
+    g.add(at(bar, -0.45 + i * 0.16, 0, 0.95));
+  }
+
+  tickers.push((t) => {
+    bell.rotation.z = Math.sin(t * 2.4) * 0.3;
+    for (const ring of waves) {
+      const p = (t * 0.45 + ring.userData.offset) % 1;
+      ring.scale.setScalar(0.4 + p * 2.4);
+      ring.material.opacity = 0.7 * (1 - p);
+    }
+    bars.forEach((bar, i) => {
+      const h = 0.12 + 0.5 * Math.abs(Math.sin(t * 2.2 + i * 0.9) * Math.cos(t * 1.3 + i * 0.4));
+      bar.scale.y = h;
+      bar.position.y = 0.1 + h / 2;
+    });
+  });
+  return g;
+}
+
+// --- Assemble the island ---
+
+const island = new THREE.Group();
+
+island.add(terrace(0, 0, 8, 0, 1, -1.2));
+island.add(terrace(-1.4, -1.4, 4.2, 1.4, 2));
+island.add(terrace(-2.0, -2.0, 1.9, 2.9, 3));
+island.add(terrace(3.0, -5.2, 1.8, 0.9, 4));
+
+// The rocky underside, hanging below the base like a floating island
+const underside = mesh(rockify(new THREE.ConeGeometry(7.6, 5.6, 15, 3), 0.08, 1, 0.3), C.rock);
+underside.rotation.x = Math.PI;
+island.add(at(underside, 0, -1.1 - 2.8, 0));
+for (const [x, z, r] of [[-4.3, 3.0, 1.4], [3.0, -4.0, 1.2]]) {
+  const rock = mesh(rockify(new THREE.ConeGeometry(r, r * 2.4, 7, 2), 0.1, x, 0.15), C.cliffDark);
+  rock.rotation.x = Math.PI;
+  island.add(at(rock, x, -2.2 - r * 1.2, z));
+}
+
+// Stairs: base up to the middle terrace, middle up to the clock tower, and up to the bell tower
+const lowerStairs = stairs(7, 0.2, 0.32, 0.9);
+lowerStairs.rotation.y = Math.PI / 2;
+island.add(at(lowerStairs, 3.6, 0, -0.6));
+island.add(at(stairs(7, 1.5 / 7, 0.28, 0.8), -2.0, 1.4, 1.4));
+island.add(at(stairs(4, 0.225, 0.3, 0.7), 3.0, 0, -2.6));
+
+// Paths across the base
+for (const [x1, z1, x2, z2] of [[3.9, -0.6, 2.4, 1.6], [2.4, 1.6, 3.7, 2.5], [2.4, 1.6, 1.1, 3.6], [3.0, -2.5, 3.5, -1.1], [-1.4, 3.2, -0.6, 4.1]]) {
+  island.add(path(x1, z1, x2, z2));
+}
+
+// A spring by the village, spilling over the island's edge as a waterfall
+const SPRING = [3.0, 5.6];
+{
+  const [px, pz] = SPRING;
+  island.add(at(cylinder(0.8, 0.85, 0.2, 11, C.stone), px, 0.1, pz), at(cylinder(0.66, 0.66, 0.02, 11, C.water), px, 0.2, pz));
+  const angle = Math.atan2(pz, px);
+  const start = Math.hypot(px, pz) + 0.7;
+  const edge = edgeRadius(terraces[0], angle);
+  const length = edge - start + 0.1;
+  const canal = group(at(box(0.6, 0.1, length, C.stone), 0, 0.05, 0), at(box(0.4, 0.04, length + 0.02, C.water), 0, 0.1, 0));
+  canal.rotation.y = Math.PI / 2 - angle;
+  island.add(at(canal, Math.cos(angle) * (start + length / 2), 0, Math.sin(angle) * (start + length / 2)));
+  const fallMaterial = new THREE.MeshLambertMaterial({ color: C.water, transparent: true, opacity: 0.85 });
+  const fall = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 3.8), fallMaterial);
+  fall.rotation.y = Math.PI / 2 - angle;
+  island.add(at(fall, Math.cos(angle) * (edge + 0.08), -1.8, Math.sin(angle) * (edge + 0.08)));
+}
+
+// The napping spot belongs to the procrastination project, down by the tower's stairs
+island.add(at(hammock(), -0.6, 1.4, 1.4));
+
+// Trees and greenery: [x, z, scale, ground height]
+for (const [x, z, s, y] of [[6.6, 2.2, 1, 0], [-6.5, 0.5, 1.1, 0], [-6.0, -2.5, 1, 0], [-3.0, -6.4, 1.1, 0], [0.2, -6.8, 1, 0], [2.0, 2.4, 0.8, 0], [-4.4, -2.2, 0.9, 1.4], [0.4, -3.6, 1, 1.4], [6.9, -2.6, 0.9, 0]]) {
+  island.add(at(cypress(s), x, y, z));
+}
+for (const [x, z, s, y] of [[2.4, 6.6, 1, 0], [-3.4, 5.6, 1, 0], [-4.8, -4.6, 1.1, 0], [6.2, -3.6, 0.8, 0], [0.6, -1.8, 0.9, 1.4], [-1.0, -3.9, 0.8, 1.4], [-6.6, -0.9, 0.8, 0], [4.8, 5.0, 0.8, 0]]) {
+  island.add(at(roundTree(s), x, y, z));
+}
+for (const [x, z, s] of [[4.0, 4.4, 1], [1.8, 1.0, 0.8], [-2.4, 4.6, 1], [7.0, 0.8, 0.9], [-5.2, -3.4, 1], [1.6, -5.6, 0.8], [-4.8, 4.8, 0.9], [-6.9, 2.6, 0.8], [5.4, 4.4, 0.7]]) {
+  island.add(at(bush(s), x, 0, z));
+}
+island.add(at(banner(C.teal), 3.9, 0, 0.0), at(banner(), 3.9, 0, -1.2));
+island.add(at(person(C.teal), 2.6, 0.04, 1.2), at(person(C.wall), -1.2, 1.44, 2.2));
+
+// The projects themselves, each remembering where its marker floats
+const v = new THREE.Vector3();
+for (const project of PROJECTS) {
+  const landmark = project.build();
+  landmark.position.set(...project.at);
+  island.add(landmark);
+  landmark.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(landmark);
+  project.anchor = new THREE.Vector3(project.at[0], bounds.max.y + 0.45, project.at[2]);
+}
+
+island.traverse((object) => {
+  if (object.isMesh && !object.material.transparent) {
+    object.castShadow = true;
+    object.receiveShadow = true;
+  }
 });
 
-// --- Animation state ---
-
-// Until it links, a node drifts across the whole window on its own wandering
-// path. Free nodes live in screen space (u, v from 0 to 1, plus a depth), so
-// they don't turn with the brain.
-const nodes = shape.map(() => ({
-  u: Math.random(),
-  v: Math.random(),
-  depth: Math.random(), // 0 = far away and dim, 1 = close and bright
-  heading: Math.random() * Math.PI * 2,
-  turn: (Math.random() - 0.5) * 0.8, // radians per second the heading drifts
-  speed: 0.006 + Math.random() * 0.014, // window widths per second
-  x: 0, // position in model space, once linked
-  y: 0,
-  z: 0,
-  phase: Math.random() * Math.PI * 2,
-  linked: false,
-  linkedAt: 0,
-  from: null, // where the node was when it linked
-  progress: 0, // 0–1, how far along its trip into the brain it is
-}));
-
-// Edges join in a soft wave from the front of the brain to the back,
-// rather than popping up at random all over it
-const order = [...edges.keys()]
-  .map((e) => {
-    const [a, b] = edges[e];
-    return [-(shape[a].z + shape[b].z) / 2 + Math.random() * 0.15, e];
-  })
-  .sort((p, q) => p[0] - q[0])
-  .map(([, e]) => e);
-let nextEdge = 0;
-const drawn = []; // { a, b, born }
-
-function linkNode(i, now) {
-  const node = nodes[i];
-  if (node.linked) return;
-  node.linked = true;
-  node.linkedAt = now;
-  // Remember where the node is relative to the camera (not the spinning brain),
-  // so its flight into the brain doesn't get swung around by the spin
-  const { size, centerX, centerY } = layout();
-  const z = (node.depth - 0.5) * 1.2;
-  const scale = (CAMERA / (CAMERA - z)) * size;
-  node.from = { x: (node.u * width - centerX) / scale, y: (centerY - node.v * height) / scale, z };
+// Clouds drifting around and below the island
+const clouds = [];
+for (const [x, y, z, s] of [[-10, -3.5, 4.5, 1.4], [8.5, -4, -6, 1.2], [3.5, -6, 10.5, 1.3], [-7.8, 5, -7.8, 1], [9.5, 3.5, 5.5, 0.9]]) {
+  const cloud = new THREE.Group();
+  for (const [cx, cy, cr] of [[0, 0, 0.9], [0.9, -0.1, 0.65], [-0.85, -0.15, 0.6], [0.3, 0.35, 0.55]]) {
+    const puff = mesh(new THREE.IcosahedronGeometry(cr, 0), C.cloud);
+    puff.scale.y = 0.7;
+    cloud.add(at(puff, cx, cy, 0));
+  }
+  cloud.scale.setScalar(s);
+  cloud.userData = { radius: Math.hypot(x, z), angle: Math.atan2(z, x), y };
+  clouds.push(cloud);
 }
 
-function addNextEdge(now) {
-  const [a, b] = edges[order[nextEdge++]];
-  drawn.push({ a, b, born: now });
-  linkNode(a, now);
-  linkNode(b, now);
-}
+// --- Scene, lights and camera ---
 
-// Slow start, slow finish
-function easeInOut(t) {
-  t = Math.min(1, Math.max(0, t));
-  return t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
-}
+const scene = new THREE.Scene();
+scene.add(island, ...clouds);
+scene.add(new THREE.HemisphereLight(0xfff4e2, 0xc99f7c, 1.9));
+const sun = new THREE.DirectionalLight(0xfff0d8, 2.4);
+sun.position.set(8, 18, 4);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12, near: 1, far: 50 });
+sun.shadow.bias = -0.0005;
+sun.shadow.normalBias = 0.02;
+scene.add(sun);
 
-// --- Drawing ---
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setClearColor(0x000000, 0);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+const TARGET = new THREE.Vector3(0, 1.5, 0);
+const camera = new THREE.OrthographicCamera();
+camera.position.copy(TARGET).add(new THREE.Vector3().setFromSphericalCoords(50, 0.95, Math.PI / 4));
+
+const controls = new OrbitControls(camera, canvas);
+controls.target.copy(TARGET);
+Object.assign(controls, {
+  enabled: finePointer, // on touch screens, let drags scroll the page instead
+  enableZoom: false,
+  enablePan: false,
+  enableDamping: true,
+  autoRotate: !reducedMotion,
+  autoRotateSpeed: 0.3,
+  minPolarAngle: 0.6,
+  maxPolarAngle: 1.15,
+});
+if (!finePointer) canvas.style.touchAction = "auto";
+controls.update();
+
+// Frame the island: the right half on wide windows (clear of the text),
+// centred under the text on narrow ones
 let width = 0;
 let height = 0;
-let yaw = -0.9; // three-quarter view, front of the brain towards the left
-
-const screenX = new Float32Array(nodes.length);
-const screenY = new Float32Array(nodes.length);
-const shade = new Float32Array(nodes.length); // brightness 0–1
-
 function resize() {
-  const ratio = devicePixelRatio || 1;
   width = canvas.clientWidth;
   height = canvas.clientHeight;
-  canvas.width = width * ratio;
-  canvas.height = height * ratio;
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-  if (reducedMotion) draw(Infinity);
-}
-
-// Spin a model-space vector around the vertical axis, then tilt it towards the camera
-function rotate(x, y, z, cosYaw, sinYaw) {
-  const rx = x * cosYaw + z * sinYaw;
-  const rz = z * cosYaw - x * sinYaw;
-  return [rx, y * Math.cos(TILT) - rz * Math.sin(TILT), rz * Math.cos(TILT) + y * Math.sin(TILT)];
-}
-
-// Where the brain sits on screen, and how big it is
-function layout() {
-  // Wide windows: the brain keeps to the right half, clear of the text on the left.
-  // Narrow windows: it sits centred in the lower part, under the text.
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.setSize(width, height, false);
   const wide = width >= 720;
-  return {
-    size: (wide ? Math.min(width * 0.5, height) : Math.min(width, height * 0.5)) * 0.92,
-    centerX: wide ? width * 0.72 : width / 2,
-    centerY: wide ? height * 0.6 : height * 0.72,
-  };
-}
-
-function project(now) {
-  const { size, centerX, centerY } = layout();
-  const cosYaw = Math.cos(yaw);
-  const sinYaw = Math.sin(yaw);
-  nodes.forEach((node, i) => {
-    if (!node.linked) {
-      screenX[i] = node.u * width;
-      screenY[i] = node.v * height;
-      // Dim, like distant stars, and faded in gently when the page opens
-      shade[i] = (0.06 + 0.22 * node.depth) * easeInOut(now / PARTICLE_FADE_IN);
-      return;
-    }
-    // Fly in a straight line from where the node was to its spot in the
-    // turning brain, so it only takes on the spin as it arrives
-    const [gx, gy, gz] = rotate(node.x, node.y + 0.05, node.z, cosYaw, sinYaw);
-    let [x, y, z] = [gx, gy, gz];
-    if (node.progress < 1) {
-      const t = node.progress;
-      x = node.from.x + (gx - node.from.x) * t;
-      y = node.from.y + (gy - node.from.y) * t;
-      z = node.from.z + (gz - node.from.z) * t;
-    }
-    const scale = (CAMERA / (CAMERA - z)) * size;
-    screenX[i] = centerX + x * scale;
-    screenY[i] = centerY - y * scale;
-    // Lit from the upper left; the far side of the brain fades out.
-    // Nodes blend from a flat glow into this lighting as they settle in.
-    shade[i] = 0.3;
-    if (node.progress > 0) {
-      const [nx, ny, nz] = rotate(...shape[i].normal, cosYaw, sinYaw);
-      const facing = Math.min(1, Math.max(0, (nz + 0.1) / 0.4));
-      const lit = Math.max(0, nx * LIGHT[0] + ny * LIGHT[1] + nz * LIGHT[2]);
-      shade[i] += (0.06 + 0.94 * facing * (0.3 + 0.7 * lit) - 0.3) * node.progress;
-    }
+  // How many pixels the island gets across its widest (about 17.5 units, rough edges included)
+  const islandPixels = wide ? Math.min(width * 0.53, height * 1.0) : Math.min(width * 0.95, height * 0.46);
+  const viewHeight = (height / islandPixels) * 17.5;
+  const viewWidth = viewHeight * (width / height);
+  const [fx, fy] = wide ? [0.73, 0.55] : [0.5, 0.77]; // where the island's centre sits on screen
+  Object.assign(camera, {
+    left: -fx * viewWidth,
+    right: (1 - fx) * viewWidth,
+    top: fy * viewHeight,
+    bottom: -(1 - fy) * viewHeight,
+    near: 0.1,
+    far: 200,
   });
+  camera.updateProjectionMatrix();
+  render();
 }
 
-function draw(now) {
-  ctx.clearRect(0, 0, width, height);
-  project(now);
+// --- Markers: an HTML link per project, kept over its spot on the island ---
 
-  // Group edges and nodes by brightness so each level is drawn in one go.
-  // Anything that rounds down to level 0 is invisible and skipped.
-  const edgePaths = Array.from({ length: SHADES + 1 }, () => new Path2D());
-  for (const { a, b, born } of drawn) {
-    // Edges fade in as their two nodes close in on each other, so long
-    // lines never streak across the screen while nodes are still in flight
-    const settled = (nodes[a].progress * nodes[b].progress) ** 3;
-    const alpha = easeInOut((now - born) / EDGE_FADE) * settled * (shade[a] + shade[b]) * 0.5;
-    const level = Math.round(Math.min(1, alpha) * SHADES);
-    if (level === 0) continue;
-    edgePaths[level].moveTo(screenX[a], screenY[a]);
-    edgePaths[level].lineTo(screenX[b], screenY[b]);
+const markers = PROJECTS.map((project) => {
+  const link = document.createElement("a");
+  link.className = "marker";
+  link.href = `#${project.card}`;
+  link.innerHTML = `<span class="label">${project.title}</span>`;
+  link.addEventListener("pointerenter", () => (controls.autoRotate = false));
+  link.addEventListener("pointerleave", () => (controls.autoRotate = !reducedMotion));
+  markerLayer.append(link);
+  return { project, link };
+});
+
+function placeMarkers() {
+  for (const { project, link } of markers) {
+    v.copy(project.anchor).applyMatrix4(island.matrixWorld).project(camera);
+    const x = ((v.x + 1) / 2) * width;
+    const y = ((1 - v.y) / 2) * height;
+    link.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
   }
-  ctx.lineWidth = 1;
-  edgePaths.forEach((path, level) => {
-    ctx.strokeStyle = `rgba(${COLOR}, ${(level / SHADES) * 0.5})`;
-    ctx.stroke(path);
-  });
-
-  const nodePaths = Array.from({ length: SHADES + 1 }, () => new Path2D());
-  nodes.forEach((node, i) => {
-    const level = Math.round(Math.min(1, shade[i]) * SHADES);
-    if (level === 0) return;
-    nodePaths[level].moveTo(screenX[i], screenY[i]);
-    nodePaths[level].arc(screenX[i], screenY[i], node.linked ? 1.6 : 0.8 + node.depth, 0, Math.PI * 2);
-  });
-  nodePaths.forEach((path, level) => {
-    ctx.fillStyle = `rgba(${COLOR}, ${level / SHADES})`;
-    ctx.fill(path);
-  });
 }
 
-let last = 0;
-let owed = 0; // edges due to be added
+function render() {
+  if (!width) return;
+  island.updateMatrixWorld();
+  renderer.render(scene, camera);
+  placeMarkers();
+}
 
-function frame(ms) {
-  const now = ms / 1000;
-  const dt = Math.min(0.05, now - last);
-  last = now;
-  yaw += SPIN * dt;
+// --- Animation ---
 
-  owed += (dt * edges.length) / BUILD_SECONDS;
-  while (nextEdge < edges.length && owed >= 1) {
-    owed -= 1;
-    addNextEdge(now);
+const clock = new THREE.Clock();
+function animate(t) {
+  island.position.y = Math.sin(t * 0.6) * 0.12;
+  for (const tick of tickers) tick(t);
+  for (const cloud of clouds) {
+    const { radius, angle, y } = cloud.userData;
+    const a = angle + t * 0.02;
+    cloud.position.set(Math.cos(a) * radius, y + Math.sin(t * 0.4 + angle) * 0.2, Math.sin(a) * radius);
   }
+}
 
-  nodes.forEach((node, i) => {
-    if (node.linked) {
-      // Head for its place in the brain over a fixed time (see project()), then bob gently
-      const goal = shape[i];
-      const bob = Math.sin(now * 0.8 + node.phase) * 0.004;
-      node.progress = easeInOut((now - node.linkedAt) / TRAVEL_SECONDS);
-      node.x = goal.x + goal.normal[0] * bob;
-      node.y = goal.y + goal.normal[1] * bob;
-      node.z = goal.z + goal.normal[2] * bob;
-    } else {
-      // Wander along a slowly curving path, wrapping around the window's edges
-      node.heading += node.turn * Math.sin(now * 0.3 + node.phase) * dt;
-      node.u += Math.cos(node.heading) * node.speed * dt;
-      node.v += Math.sin(node.heading) * node.speed * dt * (height > 0 ? width / height : 1);
-      node.u = ((node.u + 0.05) % 1.1 + 1.1) % 1.1 - 0.05;
-      node.v = ((node.v + 0.05) % 1.1 + 1.1) % 1.1 - 0.05;
-    }
-  });
-
-  draw(now);
+let running = false;
+function frame() {
+  if (!running) return;
+  animate(clock.getElapsedTime());
+  controls.update();
+  render();
   requestAnimationFrame(frame);
 }
 
+// Only animate while the hero is on screen
+new IntersectionObserver(([entry]) => {
+  if (reducedMotion) return;
+  const wasRunning = running;
+  running = entry.isIntersecting;
+  if (running && !wasRunning) requestAnimationFrame(frame);
+}).observe(hero);
+
 if (reducedMotion) {
-  // No motion: show the finished brain straight away
-  while (nextEdge < edges.length) addNextEdge(-Infinity);
-  nodes.forEach((node, i) => Object.assign(node, { x: shape[i].x, y: shape[i].y, z: shape[i].z, progress: 1 }));
+  animate(2);
+  controls.addEventListener("change", render);
 }
 
 new ResizeObserver(resize).observe(canvas);
-resize();
-
-if (!reducedMotion) requestAnimationFrame(frame);

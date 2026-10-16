@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Polaris Research Group mark (from deanzapbl.com/polaris.html) on its navy background -->
+  <rect width="100" height="100" fill="#011c43"/>
+  <g transform="translate(20 20) scale(0.6)">
+    <path d="M50 2L61 39L98 50L61 61L50 98L39 61L2 50L39 39Z" fill="white" opacity=".9"/>
+    <path d="M50 2L61 39L98 50L61 61L50 98L39 61L2 50L39 39Z" fill="#0066ff" transform="rotate(45 50 50)" opacity=".55"/>
+  </g>
+</svg>

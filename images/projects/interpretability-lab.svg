@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f4f1e8"/>
+<line x1="90" y1="260" x2="720" y2="260" stroke="#1b2a41" stroke-width="3.0" stroke-opacity="0.4"/>
+<circle cx="107" cy="266" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="129" cy="274" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="154" cy="203" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="167" cy="303" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="191" cy="227" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="221" cy="256" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="240" cy="257" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="259" cy="222" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="280" cy="299" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="299" cy="284" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="322" cy="218" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="344" cy="268" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="360" cy="219" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="387" cy="258" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="407" cy="290" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="428" cy="291" r="9" fill="#fff" stroke="#b8892b" stroke-width="3.0"/>
+<circle cx="445" cy="281" r="9" fill="#fff" stroke="#1f4e8c" stroke-width="3.0"/>
+<circle cx="466" cy="289" r="9" fill="#fff" stroke="#1f4e8c" stroke-width="3.0"/>
+<circle cx="493" cy="235" r="9" fill="#fff" stroke="#1f4e8c" stroke-width="3.0"/>
+<circle cx="505" cy="244" r="9" fill="#fff" stroke="#1f4e8c" stroke-width="3.0"/>
+<circle cx="536" cy="257" r="9" fill="#fff" stroke="#1f4e8c" stroke-width="3.0"/>
+<circle cx="553" cy="250" r="9" fill="#fff" stroke="#1f4e8c" stroke-width="3.0"/>
+<circle cx="572" cy="255" r="9" fill="#fff" stroke="#1f4e8c" stroke-width="3.0"/>
+<line x1="600" y1="120" x2="600" y2="400" stroke="#b8892b" stroke-width="4.5" stroke-opacity="1" stroke-dasharray="8 7"/>
+<text x="600" y="105" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="32" fill="#b8892b">cap</text>
+<rect x="662" y="232" width="56" height="56" rx="8" fill="#1f4e8c"/><text x="690" y="267" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="20" fill="#fff">LLM</text>
+<text x="150" y="420" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="35" fill="#b8892b">other personas</text>
+<text x="690" y="330" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="38" fill="#1f4e8c">Assistant</text>
+</svg>

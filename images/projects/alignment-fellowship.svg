@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f4f1e8"/>
+<line x1="90" y1="250" x2="710" y2="250" stroke="#1b2a41" stroke-width="3.0" stroke-opacity="0.35"/>
+<circle cx="100" cy="250" r="28" fill="#fff" stroke="#1f4e8c" stroke-width="3.75"/>
+<text x="100" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#1f4e8c">1</text>
+<line x1="100" y1="274" x2="143" y2="320" stroke="#1f4e8c" stroke-width="2.25" stroke-opacity="0.5"/>
+<text x="143" y="360" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="29" fill="#1f4e8c">Interpretability</text>
+<circle cx="186" cy="250" r="28" fill="#fff" stroke="#b8892b" stroke-width="3.75"/>
+<text x="186" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#b8892b">2</text>
+<circle cx="272" cy="250" r="28" fill="#fff" stroke="#1f4e8c" stroke-width="3.75"/>
+<text x="272" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#1f4e8c">3</text>
+<line x1="272" y1="226" x2="315" y2="180" stroke="#1f4e8c" stroke-width="2.25" stroke-opacity="0.5"/>
+<text x="315" y="160" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="29" fill="#1f4e8c">RLHF</text>
+<circle cx="358" cy="250" r="28" fill="#fff" stroke="#b8892b" stroke-width="3.75"/>
+<text x="358" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#b8892b">4</text>
+<circle cx="444" cy="250" r="28" fill="#fff" stroke="#1f4e8c" stroke-width="3.75"/>
+<text x="444" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#1f4e8c">5</text>
+<line x1="444" y1="274" x2="487" y2="320" stroke="#1f4e8c" stroke-width="2.25" stroke-opacity="0.5"/>
+<text x="487" y="360" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="29" fill="#1f4e8c">AI policy</text>
+<circle cx="530" cy="250" r="28" fill="#fff" stroke="#b8892b" stroke-width="3.75"/>
+<text x="530" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#b8892b">6</text>
+<circle cx="616" cy="250" r="28" fill="#fff" stroke="#1f4e8c" stroke-width="3.75"/>
+<text x="616" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#1f4e8c">7</text>
+<line x1="616" y1="226" x2="659" y2="180" stroke="#1f4e8c" stroke-width="2.25" stroke-opacity="0.5"/>
+<text x="659" y="160" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="29" fill="#1f4e8c">Catastrophic risk</text>
+<circle cx="702" cy="250" r="28" fill="#fff" stroke="#b8892b" stroke-width="3.75"/>
+<text x="702" y="260" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="27" fill="#b8892b">8</text>
+<text x="76" y="440" text-anchor="start" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">eight weeks</text>
+</svg>
