@@ -122,10 +122,13 @@ function sideArch(w, h, color) {
 }
 
 // A flat picture that always faces the camera, drawn on a little canvas
-function sprite(draw, size) {
+// (drawn in 128 × 128 units; pass a larger `pixels` for big sprites so they stay crisp)
+function sprite(draw, size, pixels = 128) {
   const c = document.createElement("canvas");
-  c.width = c.height = 128;
-  draw(c.getContext("2d"));
+  c.width = c.height = pixels;
+  const ctx = c.getContext("2d");
+  ctx.scale(pixels / 128, pixels / 128);
+  draw(ctx);
   const texture = new THREE.CanvasTexture(c);
   texture.colorSpace = THREE.SRGBColorSpace;
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
@@ -830,7 +833,7 @@ const sunDisc = sprite((ctx) => {
   ctx.beginPath();
   ctx.arc(64, 64, 26, 0, Math.PI * 2);
   ctx.fill();
-}, 4.5);
+}, 4.5, 512);
 
 const moonDisc = sprite((ctx) => {
   const halo = ctx.createRadialGradient(64, 64, 20, 64, 64, 64);
@@ -848,7 +851,7 @@ const moonDisc = sprite((ctx) => {
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
   }
-}, 4);
+}, 4, 512);
 
 scene.add(ambient, sunDisc, moonDisc);
 
@@ -932,11 +935,15 @@ function resize() {
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
   renderer.setSize(width, height, false);
   const wide = width >= 720;
+  // The canvas runs under the sticky header, so fit the island to the space below it
+  const header = document.querySelector(".site-header")?.offsetHeight ?? 0;
+  const below = height - header;
   // How many pixels the island gets across its widest (about 17.5 units, rough edges included)
-  const islandPixels = wide ? Math.min(width * 0.53, height * 1.0) : Math.min(width * 0.95, height * 0.46);
+  const islandPixels = wide ? Math.min(width * 0.53, below * 0.85) : Math.min(width * 0.95, height * 0.46);
   const viewHeight = (height / islandPixels) * 17.5;
   const viewWidth = viewHeight * (width / height);
-  const [fx, fy] = wide ? [0.73, 0.55] : [0.5, 0.77]; // where the island's centre sits on screen
+  // Where the island's centre sits on screen; the tower makes it taller above than below
+  const [fx, fy] = wide ? [0.73, (header + below * 0.53) / height] : [0.5, 0.77];
   Object.assign(camera, {
     left: -fx * viewWidth,
     right: (1 - fx) * viewWidth,
