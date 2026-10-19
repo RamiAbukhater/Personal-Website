@@ -750,6 +750,62 @@ for (const project of PROJECTS) {
   project.anchor = new THREE.Vector3(project.at[0], bounds.max.y + 0.45, project.at[2]);
 }
 
+// A messenger bird circles the island once the visitor has sent a letter from
+// the contact page (which sets the flag). ?bird=1 shows it anyway, ?bird=0 hides it.
+function hasSentLetter() {
+  const forced = new URLSearchParams(location.search).get("bird");
+  if (forced !== null) return forced !== "0";
+  try {
+    return localStorage.getItem("letterSent") === "1";
+  } catch {
+    return false;
+  }
+}
+if (hasSentLetter()) addBird();
+
+function addBird() {
+  // Built facing +z with its feet at the origin, in the same colours as the contact page's bird
+  const body = mesh(new THREE.OctahedronGeometry(0.22, 0), C.wall);
+  body.scale.set(0.75, 0.7, 1.4);
+  const head = at(mesh(new THREE.IcosahedronGeometry(0.12, 0), C.wall), 0, 0.14, 0.26);
+  const beak = mesh(new THREE.ConeGeometry(0.04, 0.12, 4), C.gold);
+  beak.rotation.x = Math.PI / 2;
+  const tail = box(0.16, 0.03, 0.2, C.wood);
+  tail.rotation.x = -0.25;
+  const collar = cylinder(0.08, 0.1, 0.05, 6, C.teal);
+  collar.rotation.x = 1.1;
+
+  // Each wing is a flat slab on a pivot at the shoulder
+  const wing = (side) => {
+    const slab = mesh(new THREE.BoxGeometry(0.42, 0.02, 0.22), [C.wood, C.wood, C.wood, C.cliffDark, C.wood, C.wood]);
+    const pivot = group(at(slab, side * 0.21, 0, -0.02));
+    return at(pivot, side * 0.08, 0.05, 0);
+  };
+  const wings = [wing(1), wing(-1)];
+  const bird = group(body, head, at(beak, 0, 0.13, 0.42), at(tail, 0, 0.02, -0.38), at(collar, 0, 0.09, 0.17), ...wings);
+  bird.scale.setScalar(1.8);
+  island.add(bird);
+
+  // A slow loop around the island, drifting in and out and up and down,
+  // with spells of flapping between glides
+  const ahead = new THREE.Vector3();
+  const place = (target, t) => {
+    const a = t * 0.22;
+    const r = 6.8 + Math.sin(t * 0.37) * 0.6;
+    target.set(Math.cos(a) * r, 4.6 + Math.sin(t * 0.5) * 0.5, Math.sin(a) * r);
+  };
+  tickers.push((t) => {
+    place(bird.position, t);
+    place(ahead, t + 0.1);
+    bird.lookAt(ahead.applyMatrix4(island.matrixWorld));
+    bird.rotateZ(-0.35); // banking into the turn
+    const flapping = smooth((Math.sin(t * 0.6) + 0.3) * 2);
+    const beat = Math.sin(t * 11) * 0.7 * flapping + 0.12;
+    wings[0].rotation.z = beat;
+    wings[1].rotation.z = -beat;
+  });
+}
+
 island.traverse((object) => {
   if (object.isMesh && !object.material.transparent) {
     object.castShadow = true;
