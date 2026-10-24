@@ -1123,6 +1123,37 @@ dd {
   padding-left: 1.2em;
 }
 
+.projects-empty {
+  grid-column: 1 / -1;
+  color: var(--ink-soft);
+}
+
+/* --- Home page GitHub stats: labels on the top row, numbers under them --- */
+
+#profile-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem 1rem;
+  margin: 1.5rem 0 0;
+  text-align: center;
+}
+
+#profile-stats dt {
+  grid-row: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+#profile-stats dd {
+  grid-row: 2;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
 @media (max-width: 40rem) {
   /* Dates drop back under the title; skills stack */
   .resume article > p:has(time) {

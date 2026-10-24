@@ -16,6 +16,7 @@
     <script type="module" src="global.js"></script>
     <script type="module" src="hero.js"></script>
     <script src="roles.js" defer></script>
+    <script type="module" src="index.js"></script>
   </head>
   <body class="home">
     <canvas role="img" aria-label="A small floating sandstone town, slowly turning, with a marker for each current project"></canvas>
@@ -164,6 +165,22 @@
           </article>
         </div>
       </section>
+    </section>
+
+    <section id="latest-projects" class="home-panel latest">
+      <h2>Latest Projects</h2>
+      <p>The three newest entries from my <a href="projects/">projects page</a>, loaded from the same data file.</p>
+      <div class="projects">
+        <!-- Filled in by index.js from lib/projects.json -->
+      </div>
+    </section>
+
+    <section class="home-panel github">
+      <h2>GitHub at a Glance</h2>
+      <p>Pulled live from the GitHub API each time this page loads.</p>
+      <div id="profile-stats">
+        <p>Loading GitHub stats…</p>
+      </div>
     </section>
 
     <section id="roles" class="home-panel roles">

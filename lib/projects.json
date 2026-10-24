@@ -1,0 +1,175 @@
+[
+  {
+    "title": "VIA, Cognitively-Grounded Vision-Language-Action Model",
+    "year": "2026",
+    "status": "current",
+    "date": "2026 – Present",
+    "image": "images/projects/via.jpg",
+    "alt": "White robotic arm in a showroom",
+    "stack": "Python · PyTorch · SigLIP · RSSM world model · active inference · LIBERO",
+    "description": "A vision-language-action model that infers a latent world state instead of mapping observations straight to actions.",
+    "bullets": [
+      "Replacing direct observation-to-action mapping with probabilistic inference over a latent world state, across five PyTorch modules for perception, belief filtering, RSA goal inference, world modeling, and CEM planning.",
+      "Trained on the LIBERO spatial suite (432 demonstrations) on UCSD DSMLP A5000 GPUs, root-causing a belief-state variance collapse to the absence of occlusions in the demonstration data."
+    ],
+    "url": "https://github.com/RamiAbukhater/via-model",
+    "linkText": "View the code on GitHub"
+  },
+  {
+    "title": "Room Mesh to MuJoCo Simulation Environment",
+    "year": "2026",
+    "status": "current",
+    "date": "2026 – Present",
+    "image": "images/projects/room-mesh.jpg",
+    "alt": "Empty room with a wood floor and a large window",
+    "stack": "Python · MuJoCo · 3D mesh processing",
+    "description": "Building a pipeline that turns a scanned 3D room mesh into a simulation-ready MuJoCo environment, so real captured spaces can be used directly as robot-learning scenes."
+  },
+  {
+    "title": "Macro Optimizer, Constrained Meal Optimization",
+    "year": "2026",
+    "status": "current",
+    "date": "2026",
+    "image": "images/projects/macro-optimizer.jpg",
+    "alt": "Glass meal-prep containers filled with rice and vegetables",
+    "stack": "Python · PuLP/CBC integer linear programming · Flask · pytest",
+    "description": "An integer-linear-programming engine that plans the cheapest UCSD campus meals that hit daily macro targets.",
+    "bullets": [
+      "Built an integer-linear-programming engine that finds the cheapest combination of UCSD campus food meeting daily macro targets within a dining-dollar budget, with a soft-constraint fallback when no exact solution fits.",
+      "Integrated live nutrition data from UCSD Dining, Open Food Facts, and USDA FoodData Central behind a Flask app and weekly menu planner with anti-repetition and time-budget constraints, backed by a pytest suite."
+    ],
+    "url": "https://github.com/RamiAbukhater/Macro-Optimizer",
+    "linkText": "View the code on GitHub"
+  },
+  {
+    "title": "PiCar Lane Following and Obstacle Avoidance",
+    "year": "2026",
+    "status": "current",
+    "date": "2026",
+    "image": "images/projects/picar.jpg",
+    "alt": "Small toy car driving over rocks",
+    "stack": "Python · computer vision · vision-language models",
+    "description": "Real-time lane following and obstacle avoidance on a PiCar, with a vision-language model helping make driving decisions.",
+    "bullets": [
+      "Built real-time lane-following and obstacle-avoidance control on a PiCar platform using computer vision for lane detection.",
+      "Prototyped a vision-language-model decision manager using scene understanding to inform real-time driving decisions (course project, DSC 190)."
+    ]
+  },
+  {
+    "title": "Selene Nanorobotics, Sensing & Navigation for Root-Canal Microrobots",
+    "year": "2026",
+    "status": "current",
+    "date": "June 2026 – Present",
+    "image": "images/projects/selene.svg",
+    "alt": "A tooth with a microrobot inside one root canal, linked by dashed lines to four sensors around it",
+    "description": "Selene is building magnetically steered microrobots that clear bacterial biofilm from inside root canals. I lead sensor simulation and navigation, building the simulator that works out how to tell where a robot is inside the canal, and turning it into a tool that searches for better robot designs and sensor layouts. Specifics are under NDA.",
+    "url": "https://selenenanorobotics.com/",
+    "linkText": "Visit Selene"
+  },
+  {
+    "title": "Triton AI, Perception for an Autonomous Vehicle",
+    "year": "2026",
+    "status": "current",
+    "date": "Sept 2026 – Present",
+    "image": "images/projects/triton-ai.svg",
+    "alt": "A car seen from above, with front and rear camera views and rings of LiDAR points around it",
+    "description": "On UC San Diego's student autonomy team, I brought up our vehicle's first full sensing suite: front and rear cameras plus a 360° LiDAR, calibrated into one synchronized view of the world."
+  },
+  {
+    "title": "Why We Procrastinate, Reinforcement Learning Research",
+    "year": "2026",
+    "status": "current",
+    "date": "July 2026 – Present",
+    "image": "images/projects/procrastination.svg",
+    "alt": "Bar chart where effort stays low over time and spikes just before a deadline, under a rising curve of discounted value",
+    "description": "In Prof. Lucy Lai's group in UC San Diego Cognitive Science, I am rewriting the Bellman equation so agents procrastinate the way people do, then fitting them to human data to test whether discounting the future is enough to explain it.",
+    "url": "https://lucylai.com/research.html",
+    "linkText": "About the lab"
+  },
+  {
+    "title": "DataWorks, AI Interpretability Lab",
+    "year": "2026",
+    "status": "current",
+    "date": "2026 – Present",
+    "image": "images/projects/interpretability-lab.svg",
+    "alt": "Persona points spread along one axis, from other personas to the Assistant, with a dashed line marking the activation cap",
+    "description": "I lead an AI interpretability lab inside UC San Diego's student data science organization, working through Anthropic's <cite>The Assistant Axis</cite>, which finds a single activation direction tracking how much a model acts as its Assistant persona.",
+    "url": "https://www.anthropic.com/research/assistant-axis",
+    "linkText": "Read the paper"
+  },
+  {
+    "title": "DataWorks, Audio-Perception Lab",
+    "year": "2026",
+    "status": "current",
+    "date": "2026 – Present",
+    "image": "images/projects/audio-lab.svg",
+    "alt": "A sound wave turned into a log-mel spectrogram, then into tokens feeding a transformer",
+    "description": "I lead an audio-perception lab building a shared pipeline that turns raw sound into tokens a multimodal transformer can read, then testing whether one general model can match classifiers built for a single task."
+  },
+  {
+    "title": "The Social Adjacency of LLMs, Working Paper",
+    "year": "2026",
+    "status": "current",
+    "date": "2026 – Present",
+    "image": "images/projects/social-adjacency.svg",
+    "alt": "A person beside their friends, trading chat messages with a language model",
+    "description": "With a colleague at UC Berkeley, I am writing a paper on why we treat LLMs as socially adjacent beings, building on David Chalmers' <cite>What We Talk to When We Talk to Language Models</cite> and Daniel Dennett's <cite>True Believers</cite>.",
+    "url": "https://news.berkeley.edu/2026/07/10/berkeley-talks-when-we-talk-to-ai-what-are-we-talking-to/",
+    "linkText": "Hear Chalmers' talk"
+  },
+  {
+    "title": "AI Alignment at UC San Diego, Intro Fellowship",
+    "year": "2026",
+    "status": "current",
+    "date": "Fall 2026",
+    "image": "images/projects/alignment-fellowship.svg",
+    "alt": "An eight-week timeline marking interpretability, RLHF, AI policy, and catastrophic risk, beside a stack of papers",
+    "description": "An 8-week introduction to AI alignment adapted from MIT AI Alignment and BlueDot Impact materials, covering interpretability, RLHF, AI policy, and catastrophic risk.",
+    "url": "https://aialignmentatucsd.org/",
+    "linkText": "Visit AIA"
+  },
+  {
+    "title": "BinTek, CV-Assisted Data Pipeline",
+    "year": "2026",
+    "status": "past",
+    "date": "January 2026",
+    "image": "images/projects/bintek.jpg",
+    "alt": "Red, yellow, and green waste bins",
+    "stack": "Python · FastAPI · PostgreSQL",
+    "description": "A FastAPI and PostgreSQL pipeline that classifies waste with a computer-vision API.",
+    "bullets": [
+      "Built a FastAPI backend with a PostgreSQL database for data ingestion, cleaning, storage, and statistical analysis.",
+      "Integrated the Eyepop.ai computer-vision API for automated data collection and waste classification."
+    ]
+  },
+  {
+    "title": "Menu Generator, Full-Stack Web App",
+    "year": "2025",
+    "status": "past",
+    "date": "July 2025",
+    "image": "images/projects/menu-generator.jpg",
+    "alt": "Family eating together at a table",
+    "stack": "React/Node.js · Spring Boot REST API · MariaDB",
+    "description": "A full-stack menu-planning web app, from database schema to production deployment.",
+    "bullets": [
+      "Architected and deployed a full-stack menu-planning web app end to end, with a React/Node.js frontend, a Spring Boot REST API, and a self-hosted MariaDB database on a NAS.",
+      "Designed the data model, REST endpoints, and a responsive UI, owning the system from schema through production deployment."
+    ],
+    "url": "https://github.com/RamiAbukhater/Menu-Gen",
+    "linkText": "View the code on GitHub"
+  },
+  {
+    "title": "RoboNurse",
+    "year": "2024",
+    "status": "past",
+    "date": "May 2024, DA Hacks 3.5 hackathon award winner",
+    "image": "images/projects/robonurse.jpg",
+    "alt": "Arduino circuit board",
+    "stack": "Arduino (C++) · Raspberry Pi (Python) · ChatGPT API",
+    "description": "A nursing-assistant robot that listens to symptoms and analyses them.",
+    "bullets": [
+      "Programmed Arduino in C++ for movement and Raspberry Pi in Python for speech processing in a nursing-assistant robot.",
+      "Integrated the ChatGPT API for symptom analysis."
+    ]
+  }
+]

@@ -136,3 +136,72 @@ form?.addEventListener('submit', function (event) {
   let url = form.action + '?' + params.join('&');
   location.href = url;
 });
+
+// --- Project data: loaded from lib/projects.json and rendered by the pages that list projects ---
+
+export async function fetchJSON(url) {
+  try {
+    // Fetch the JSON file from the given URL
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch projects: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching or parsing JSON data:', error);
+  }
+}
+
+// Paths in the JSON are from the site root, so they work from any page depth
+function sitePath(path) {
+  return /^(https?:)?\/\//.test(path) ? path : BASE_PATH + path;
+}
+
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+  if (!(containerElement instanceof Element)) {
+    console.error('renderProjects needs a container element, got', containerElement);
+    return;
+  }
+
+  // Anything but h1–h6 falls back to h2
+  if (!/^h[1-6]$/i.test(headingLevel)) {
+    headingLevel = 'h2';
+  }
+
+  // Start from an empty container so re-rendering never duplicates cards
+  containerElement.innerHTML = '';
+
+  if (!Array.isArray(projects) || projects.length === 0) {
+    containerElement.innerHTML = '<p class="projects-empty">No projects to show yet.</p>';
+    return;
+  }
+
+  for (let project of projects) {
+    const article = document.createElement('article');
+
+    // Bullet points when the project has them, otherwise the one-line description
+    let details = project.bullets?.length
+      ? `<ul>${project.bullets.map((b) => `<li>${b}</li>`).join('')}</ul>`
+      : `<p>${project.description ?? ''}</p>`;
+
+    article.innerHTML = `
+      <${headingLevel}>${project.title}</${headingLevel}>
+      <img src="${sitePath(project.image ?? 'https://dsc106.com/labs/lab02/images/empty.svg')}" alt="${project.alt ?? project.title}" />
+      <div>
+        <p><time datetime="${project.year}">${project.date ?? project.year}</time></p>
+        ${project.stack ? `<p>${project.stack}</p>` : ''}
+        ${details}
+        ${project.url ? `<p><a href="${sitePath(project.url)}" target="_blank">${project.linkText ?? 'Learn more'}</a></p>` : ''}
+      </div>
+    `;
+
+    containerElement.appendChild(article);
+  }
+}
+
+export async function fetchGitHubData(username) {
+  return fetchJSON(`https://api.github.com/users/${username}`);
+}
