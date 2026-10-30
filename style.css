@@ -1128,6 +1128,96 @@ dd {
   color: var(--ink-soft);
 }
 
+/* --- Projects page: pie chart, legend, and search --- */
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2em;
+}
+
+#projects-pie-plot {
+  flex: 1 1 12em;
+  max-width: 20em;
+  margin-block: 2em;
+  overflow: visible;
+
+  /* Not plain :hover, which would fade every slice from the gaps around the pie */
+  &:has(path:hover) path:not(:hover) {
+    opacity: 0.5;
+  }
+
+  path {
+    cursor: pointer;
+    transition: 300ms;
+  }
+}
+
+/* Important to beat the --color each legend item sets in its style attribute */
+.selected {
+  --color: oklch(50% 0.2 300) !important;
+
+  &:is(path) {
+    fill: var(--color);
+  }
+}
+
+.legend {
+  flex: 1 1 14em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+  gap: 1em;
+  margin: 0;
+  padding: 1em;
+  border: 1px solid color-mix(in oklch, canvastext 25%, transparent);
+  border-radius: 0.5rem;
+  list-style: none;
+}
+
+/* The gap inside an item is smaller than the gap between items, so each reads as one unit */
+.legend-item button {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+  padding: 0.25em;
+  border: none;
+  border-radius: 0.25rem;
+  background: none;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+
+  &:hover {
+    background-color: color-mix(in oklch, var(--color) 15%, transparent);
+  }
+}
+
+.legend-item.selected button {
+  font-weight: 600;
+}
+
+.legend-item em {
+  opacity: 0.7;
+}
+
+.swatch {
+  flex: none;
+  width: 1em;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: var(--color);
+}
+
+.searchBar {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-block: 0 2rem;
+  padding: 0.6em 0.8em;
+}
+
 /* --- Home page GitHub stats: labels on the top row, numbers under them --- */
 
 #profile-stats dl {
