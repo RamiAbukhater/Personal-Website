@@ -8,14 +8,21 @@
     <script type="module" src="../global.js"></script>
     <script type="module" src="projects.js"></script>
   </head>
-  <body>
+  <body class="home">
     <header class="site-header">
       <a class="brand" href="../">Rami Abukhater</a>
     </header>
 
-    <h1 class="projects-title">Projects</h1>
+    <section class="projects-intro">
+      <div>
+        <h1 class="projects-title">Projects</h1>
+        <p class="tagline">Research, Robotics &amp; Full-Stack Builds</p>
+        <p class="bio">
+          Everything I am building now and have built before. Click a slice or a
+          year to filter by year, search to narrow further, or do both.
+        </p>
+      </div>
 
-    <section>
       <div class="container">
         <svg id="projects-pie-plot" viewBox="-50 -50 100 100" role="img" aria-label="Pie chart of projects per year"></svg>
         <ul class="legend"></ul>
@@ -24,7 +31,7 @@
       <input class="searchBar" type="search" aria-label="Search projects" placeholder="🔍 Search projects…" />
     </section>
 
-    <section>
+    <section class="home-panel">
       <h2>Current Projects</h2>
 
       <div class="projects" id="current-projects">
@@ -32,7 +39,7 @@
       </div>
     </section>
 
-    <section>
+    <section class="home-panel">
       <h2>Past Projects</h2>
 
       <div class="projects" id="past-projects">

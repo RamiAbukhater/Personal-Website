@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f4f1e8"/>
+<path d="M170 500 C215 340 290 190 410 0 L670 0 C570 190 510 340 480 500 Z" fill="#1f4e8c" stroke="none" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" fill-opacity="0.07"/>
+<path d="M170 500 C215 340 290 190 410 0" fill="none" stroke="#1f4e8c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M480 500 C510 340 570 190 670 0" fill="none" stroke="#1f4e8c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M325 500 C362 340 430 190 540 0" fill="none" stroke="#b8892b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 12"/>
+<polygon points="350,370 280,170 520,230" fill="#1f4e8c" fill-opacity="0.12"/>
+<rect x="432" y="132" width="50" height="50" rx="6" fill="#fff" stroke="#b8892b" stroke-width="3.5" />
+<rect x="420" y="120" width="74" height="74" rx="4" fill="none" stroke="#b8892b" stroke-width="2.5" stroke-dasharray="7 6"/>
+<line x1="494" y1="157" x2="630" y2="157" stroke="#b8892b" stroke-width="2.25" stroke-opacity="0.7" stroke-linecap="round" stroke-dasharray="5 6"/>
+<text x="640" y="166" text-anchor="start" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">obstacle</text>
+<g transform="rotate(13 345 410)"><rect x="318" y="366" width="54" height="88" rx="12" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0" /><rect x="308" y="380" width="10" height="22" rx="3" fill="#1b2a41" stroke="#1b2a41" stroke-width="0" /><rect x="372" y="380" width="10" height="22" rx="3" fill="#1b2a41" stroke="#1b2a41" stroke-width="0" /><rect x="308" y="426" width="10" height="22" rx="3" fill="#1b2a41" stroke="#1b2a41" stroke-width="0" /><rect x="372" y="426" width="10" height="22" rx="3" fill="#1b2a41" stroke="#1b2a41" stroke-width="0" /><rect x="328" y="380" width="34" height="16" rx="4" fill="#fff" stroke="#1f4e8c" stroke-width="0" /></g>
+<rect x="50" y="70" width="210" height="70" rx="14" fill="#fff" stroke="#1f4e8c" stroke-width="3.5" />
+<text x="155" y="115" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="28" fill="#1f4e8c">pass on left</text>
+<path d="M200 140 L225 195 L150 140" fill="#fff" stroke="#1f4e8c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+<line x1="152" y1="140" x2="198" y2="140" stroke="#fff" stroke-width="5" stroke-opacity="1" stroke-linecap="round"/>
+<rect x="640" y="380" width="80" height="56" rx="8" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0" /><text x="680.0" y="416.4" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="24" fill="#fff">VLM</text>
+<line x1="640" y1="408" x2="400" y2="408" stroke="#1f4e8c" stroke-width="2.25" stroke-opacity="0.45" stroke-linecap="round" stroke-dasharray="5 6"/>
+</svg>

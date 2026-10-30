@@ -1086,41 +1086,48 @@ dd {
   margin: 0;
 }
 
-/* --- Projects page: as many columns as fit, each card's rows aligned --- */
+/* --- Project cards: the home page's .card, plus a date, a tech stack, and bullets --- */
 
 .projects {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-  gap: 1em 1.5em;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
-/* Heading, image, and details share rows with the neighbouring cards */
-.projects article {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 3;
-  margin-bottom: 1.5rem;
+.card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: var(--ink);
 }
 
-.projects h3 {
-  margin: 0;
+.card .card-meta,
+.card .card-stack {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.7rem;
+  line-height: 1.5;
 }
 
-.projects img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: 0.5rem;
+.card .card-meta {
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gold);
 }
 
-.projects p {
-  margin-block: 0 0.5rem;
+.card .card-stack {
+  margin-bottom: 0.75rem;
+  color: var(--ink-faint);
 }
 
-.projects ul {
-  margin-block: 0 0.5rem;
-  padding-left: 1.2em;
+.card ul {
+  margin: 0 0 1rem;
+  padding-left: 1.1em;
+  color: var(--ink-soft);
+}
+
+.card li + li {
+  margin-top: 0.5rem;
 }
 
 .projects-empty {
@@ -1128,19 +1135,29 @@ dd {
   color: var(--ink-soft);
 }
 
-/* --- Projects page: pie chart, legend, and search --- */
+/* --- Projects page: intro beside the pie chart, as the home hero sits beside its island --- */
+
+body.home > .projects-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem 3rem;
+  box-sizing: border-box;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding: 3rem 2rem;
+}
 
 .container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 2em;
+  gap: 1.5rem;
 }
 
 #projects-pie-plot {
-  flex: 1 1 12em;
-  max-width: 20em;
-  margin-block: 2em;
+  flex: 1 1 11em;
+  max-width: 17em;
   overflow: visible;
 
   /* Not plain :hover, which would fade every slice from the gaps around the pie */
@@ -1149,6 +1166,8 @@ dd {
   }
 
   path {
+    stroke: var(--paper);
+    stroke-width: 0.5;
     cursor: pointer;
     transition: 300ms;
   }
@@ -1156,7 +1175,7 @@ dd {
 
 /* Important to beat the --color each legend item sets in its style attribute */
 .selected {
-  --color: oklch(50% 0.2 300) !important;
+  --color: #7a4fa8 !important;
 
   &:is(path) {
     fill: var(--color);
@@ -1164,14 +1183,15 @@ dd {
 }
 
 .legend {
-  flex: 1 1 14em;
+  flex: 1 1 9em;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
-  gap: 1em;
+  gap: 0.25rem;
   margin: 0;
-  padding: 1em;
-  border: 1px solid color-mix(in oklch, canvastext 25%, transparent);
-  border-radius: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.75rem;
+  background-color: var(--surface);
+  box-shadow: 0 1px 3px rgb(27 42 65 / 6%);
   list-style: none;
 }
 
@@ -1181,11 +1201,13 @@ dd {
   align-items: center;
   gap: 0.5em;
   width: 100%;
-  padding: 0.25em;
+  padding: 0.25em 0.5em;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.375rem;
   background: none;
-  color: inherit;
+  color: var(--ink);
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.85rem;
   text-align: start;
   cursor: pointer;
 
@@ -1199,23 +1221,36 @@ dd {
 }
 
 .legend-item em {
-  opacity: 0.7;
+  color: var(--ink-faint);
 }
 
 .swatch {
   flex: none;
-  width: 1em;
+  width: 0.8em;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   background-color: var(--color);
 }
 
 .searchBar {
-  display: block;
-  box-sizing: border-box;
+  grid-column: 1 / -1;
   width: 100%;
-  margin-block: 0 2rem;
-  padding: 0.6em 0.8em;
+  padding: 0.7em 1em;
+  border-color: var(--rule);
+  border-radius: 0.75rem;
+  background-color: var(--surface);
+  color: var(--ink);
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 1px;
+  }
+}
+
+@media (max-width: 48rem) {
+  body.home > .projects-intro {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* --- Home page GitHub stats: labels on the top row, numbers under them --- */

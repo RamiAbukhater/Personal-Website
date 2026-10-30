@@ -19,8 +19,9 @@ const legend = d3.select('.legend');
 const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 const sliceGenerator = d3.pie().value((d) => d.value);
 
-// Colors are keyed by year, so a year keeps its color when a search removes others
-const colors = d3.scaleOrdinal(d3.schemeTableau10);
+// Colors are keyed by year, so a year keeps its color when a search removes others.
+// These are the theme colors from the home page's roles section.
+const colors = d3.scaleOrdinal(['#2c5aa0', '#c08a1e', '#2a7f78', '#b23a48']);
 
 // The two filters: both are kept here so that either one can change without losing the other
 let query = '';

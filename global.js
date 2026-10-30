@@ -181,6 +181,7 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
 
   for (let project of projects) {
     const article = document.createElement('article');
+    article.className = 'card';
 
     // Bullet points when the project has them, otherwise the one-line description
     let details = project.bullets?.length
@@ -188,13 +189,13 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
       : `<p>${project.description ?? ''}</p>`;
 
     article.innerHTML = `
-      <${headingLevel}>${project.title}</${headingLevel}>
       <img src="${sitePath(project.image ?? 'https://dsc106.com/labs/lab02/images/empty.svg')}" alt="${project.alt ?? project.title}" />
       <div>
-        <p><time datetime="${project.year}">${project.date ?? project.year}</time></p>
-        ${project.stack ? `<p>${project.stack}</p>` : ''}
+        <p class="card-meta"><time datetime="${project.year}">${project.date ?? project.year}</time></p>
+        <${headingLevel}>${project.title}</${headingLevel}>
+        ${project.stack ? `<p class="card-stack">${project.stack}</p>` : ''}
         ${details}
-        ${project.url ? `<p><a href="${sitePath(project.url)}" target="_blank">${project.linkText ?? 'Learn more'}</a></p>` : ''}
+        ${project.url ? `<a href="${sitePath(project.url)}" target="_blank">${project.linkText ?? 'Learn more'} →</a>` : ''}
       </div>
     `;
 

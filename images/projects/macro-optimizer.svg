@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f4f1e8"/>
+<line x1="130" y1="415" x2="560" y2="415" stroke="#1b2a41" stroke-width="3" stroke-opacity="0.4" stroke-linecap="round"/>
+<line x1="130" y1="415" x2="130" y2="70" stroke="#1b2a41" stroke-width="3" stroke-opacity="0.4" stroke-linecap="round"/>
+<path d="M210 345 L210 185 L330 130 L490 225 L435 355 Z" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill-opacity="0.12"/>
+<line x1="165" y1="331" x2="450" y2="410" stroke="#b8892b" stroke-width="4" stroke-opacity="1" stroke-linecap="round" stroke-dasharray="8 7"/>
+<circle cx="210" cy="345" r="12" fill="#b8892b" stroke="#fff" stroke-width="3.5"/>
+<text x="232" y="330" text-anchor="start" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="28" fill="#1f4e8c">cheapest</text>
+<text x="545" y="458" text-anchor="end" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="28" fill="#1b2a41">protein</text>
+<text x="148" y="88" text-anchor="start" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="28" fill="#1b2a41">carbs</text>
+<rect x="590" y="130" width="160" height="58" rx="29" fill="#fff" stroke="#b8892b" stroke-width="3.5" />
+<text x="670" y="167" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">budget</text>
+<rect x="590" y="215" width="160" height="58" rx="29" fill="#fff" stroke="#b8892b" stroke-width="3.5" />
+<text x="670" y="252" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">macros</text>
+<rect x="590" y="300" width="160" height="58" rx="29" fill="#fff" stroke="#b8892b" stroke-width="3.5" />
+<text x="670" y="337" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">menu</text>
+</svg>
