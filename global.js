@@ -119,23 +119,7 @@ button.addEventListener('click', function () {
   localStorage.colorScheme = colorScheme;
 });
 
-// --- Contact form: build the mailto: URL ourselves so spaces are encoded as %20, not + ---
-
-let form = document.querySelector('form');
-
-form?.addEventListener('submit', function (event) {
-  event.preventDefault();
-
-  let data = new FormData(form);
-  let params = [];
-
-  for (let [name, value] of data) {
-    params.push(`${name}=${encodeURIComponent(value)}`);
-  }
-
-  let url = form.action + '?' + params.join('&');
-  location.href = url;
-});
+// The contact form is handled by contact/contact.js
 
 // --- Project data: loaded from lib/projects.json and rendered by the pages that list projects ---
 

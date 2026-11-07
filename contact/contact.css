@@ -1,0 +1,467 @@
+/* Contact page: a letter on the desk and a messenger bird at the window.
+   Colours follow the home island: warm sandstone by day, moonlit by night.
+   light-dark() follows the color-scheme the theme button sets on <html>. */
+
+html:has(.contact) {
+  --paper: light-dark(#fbf9f4, #11161f);
+  --ink: light-dark(#1b2a41, #e8e3d6);
+  --ink-soft: light-dark(#4a5566, #b3bccb);
+  --link: light-dark(var(--color-accent), #8fb3ea);
+
+  /* The window scene */
+  --wall: light-dark(#ecd9b6, #5d5868);
+  --wall-block: light-dark(#e4cda6, #555061);
+  --frame: light-dark(#f6eddd, #a9a3a8);
+  --frame-shade: light-dark(#eadbc1, #8c8690);
+  --sky-top: light-dark(#a8d2dc, #141c38);
+  --sky-bottom: light-dark(#fff1d9, #3d4778);
+  --sun: light-dark(#ffd27a, #f1ecdf);
+  --sun-halo: light-dark(rgb(255 214 130 / 35%), rgb(214 224 255 / 18%));
+  --star: light-dark(transparent, #fff6dc);
+  --cloud: light-dark(#fffaf0, #56608e);
+  --cloud-shade: light-dark(#f0e6d6, #4a5380);
+  --far-top: light-dark(#ecd9b6, #7a7590);
+  --far-cliff: light-dark(#d9ad7f, #635d7c);
+  --far-under: light-dark(#a86f52, #4b4566);
+  --far-roof: light-dark(#cc7650, #7f5f6c);
+  --far-tree: light-dark(#667f57, #4a5d58);
+  --shutter: light-dark(#7fb5aa, #4d7570);
+  --shutter-shade: light-dark(#679b90, #3d625e);
+  --stone: light-dark(#d6bd96, #8a8079);
+  --stone-front: light-dark(#c4a87f, #6f6762);
+  --wood: light-dark(#9a6a48, #74553f);
+  --leaf: light-dark(#94a866, #61735a);
+  --leaf-dark: light-dark(#667f57, #4a5d4b);
+  --terracotta: light-dark(#cc7650, #96604c);
+
+  /* The bird keeps its colours at night, just a touch dimmer */
+  --bird: light-dark(#f6eddd, #ddd6c8);
+  --bird-belly: light-dark(#fffbf3, #ebe5d8);
+  --bird-wing: light-dark(#b8805c, #9b6e54);
+  --bird-wing-tip: light-dark(#8a5c3d, #74513b);
+  --bird-collar: #7fb5aa;
+  --bird-beak: #e0aa45;
+  --bird-eye: #4a3530;
+
+  /* The letter is paper whatever the theme */
+  --parchment: light-dark(#fbf3e0, #e9dcbc);
+  --parchment-edge: light-dark(#ecdcb8, #d4c299);
+  --letter-ink: #3b2a20;
+  --letter-rule: rgb(120 88 58 / 28%);
+  --wax: #b0493a;
+  --wax-dark: #8a3429;
+  --error: #a3322a;
+
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+html.theme-changing:has(.contact) {
+  transition: background-color 0.6s, color 0.6s;
+}
+
+.contact a {
+  color: var(--link);
+}
+
+.contact .site-header {
+  background-color: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.contact h1,
+.contact h2 {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+.contact h1 {
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  margin-block: 0.5rem 0.75rem;
+}
+
+.contact-intro p {
+  max-width: 38rem;
+  color: var(--ink-soft);
+}
+
+.contact .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- Layout: the window beside the letter, stacked on narrow screens --- */
+
+.scene {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: 2rem;
+  scroll-margin-top: 7rem; /* clear of the sticky header */
+}
+
+@media (max-width: 46rem) {
+  .scene {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .window {
+    max-height: 58svh;
+  }
+}
+
+.window {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* --- The window scene --- */
+
+.wall { fill: var(--wall); }
+.wall-blocks { fill: var(--wall-block); }
+.sky-top { stop-color: var(--sky-top); }
+.sky-bottom { stop-color: var(--sky-bottom); }
+.stars { fill: var(--star); }
+.sun { fill: var(--sun); }
+.sun-halo { fill: var(--sun-halo); }
+.cloud { fill: var(--cloud); }
+.cloud-shade { fill: var(--cloud-shade); }
+.far-top { fill: var(--far-top); }
+.far-cliff { fill: var(--far-cliff); }
+.far-under { fill: var(--far-under); }
+.far-tower { fill: var(--frame); }
+.far-roof { fill: var(--far-roof); }
+.far-tree { fill: var(--far-tree); }
+
+.shutter { fill: var(--shutter); stroke: var(--shutter-shade); stroke-width: 3; stroke-linecap: round; }
+.shutter polygon:first-child { stroke: none; }
+.shutter-shade { fill: var(--shutter-shade); stroke: none; }
+
+.frame { fill: none; stroke: var(--frame); stroke-width: 14; }
+.frame-reveal { fill: none; stroke: var(--frame-shade); stroke-width: 4; }
+.keystone { fill: var(--frame); }
+.sill-top { fill: var(--stone); }
+.sill-front { fill: var(--stone-front); }
+
+.leaf { fill: var(--leaf); }
+.leaf-dark { fill: var(--leaf-dark); }
+.pot,
+.pot-rim { fill: var(--terracotta); }
+.pot-rim { filter: brightness(0.9); }
+.perch { fill: var(--wood); }
+
+/* Things drift a little in the sky */
+@media (prefers-reduced-motion: no-preference) {
+  .cloud { animation: drift 14s ease-in-out infinite alternate; }
+  .cloud-far { animation-duration: 19s; animation-delay: -6s; }
+  .cloud-low { animation-duration: 17s; animation-direction: alternate-reverse; }
+  .far-island { animation: bob 6s ease-in-out infinite alternate; }
+}
+
+@keyframes drift {
+  to { translate: 18px 0; }
+}
+
+@keyframes bob {
+  to { translate: 0 -5px; }
+}
+
+/* --- The bird --- */
+
+.bird-body { fill: var(--bird); }
+.bird-belly { fill: var(--bird-belly); }
+.bird-face { fill: var(--bird); }
+.bird-face-shade { fill: var(--bird-belly); }
+.bird-tail { fill: var(--bird-wing-tip); }
+.bird-wing { fill: var(--bird-wing); }
+.bird-wing-tip { fill: var(--bird-wing-tip); }
+.bird-collar { fill: var(--bird-collar); }
+.bird-beak { fill: var(--bird-beak); }
+.bird-eye { fill: var(--bird-eye); }
+.bird-leg { stroke: var(--wood); stroke-width: 2.2; stroke-linecap: round; }
+
+.scroll-paper { fill: var(--parchment); stroke: var(--parchment-edge); stroke-width: 1; }
+.scroll-end { fill: var(--parchment-edge); }
+.scroll-ribbon { fill: var(--wax); }
+
+/* Every animated part turns about its own box */
+.bird,
+.bird-hop,
+.bird-head,
+.bird-wing,
+.bird-eye {
+  transform-box: fill-box;
+}
+
+.bird { transform-origin: 50% 100%; }
+.bird-hop { transform-origin: 50% 100%; }
+.bird-head { transform-origin: 20% 90%; } /* the neck */
+.bird-wing { transform-origin: 85% 30%; } /* the shoulder */
+.bird-eye { transform-origin: center; }
+
+.bird-scroll { opacity: 0; }
+.has-scroll .bird-scroll { opacity: 1; }
+
+/* --- The letter --- */
+
+/* The letter and the confirmation share one spot, so nothing jumps when they swap */
+.letter-slot {
+  display: grid;
+}
+
+.letter-slot > * {
+  grid-area: 1 / 1;
+}
+
+/* Undo the site's generic form layout */
+.contact .letter {
+  display: block;
+  max-width: none;
+  box-sizing: border-box;
+  padding: clamp(1.25rem, 4vw, 2.25rem) clamp(1.25rem, 4vw, 2.5rem);
+  background:
+    radial-gradient(ellipse at 20% 0%, rgb(255 255 255 / 45%), transparent 60%),
+    radial-gradient(ellipse at 100% 100%, rgb(176 132 80 / 14%), transparent 55%),
+    var(--parchment);
+  border: 1px solid var(--parchment-edge);
+  border-radius: 4px 4px 10px 6px;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 40%) inset,
+    0 18px 40px -18px rgb(60 40 20 / 45%),
+    0 2px 6px rgb(60 40 20 / 12%);
+  color: var(--letter-ink);
+  rotate: -0.6deg;
+  font-family: Caveat, "Segoe Print", "Bradley Hand", cursive;
+}
+
+.letter-date {
+  margin: 0;
+  text-align: right;
+  font-size: 1.25rem;
+  opacity: 0.75;
+}
+
+.contact .letter-salutation {
+  margin: 0.25rem 0 0.5rem;
+  font-family: inherit;
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+.contact .letter label {
+  display: block;
+  font-size: 1.35rem;
+}
+
+/* Fields are lines written on the page, not boxes */
+.contact .letter input,
+.contact .letter textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 0.15em;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--letter-ink);
+  font-family: inherit;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+}
+
+.contact .letter textarea {
+  resize: vertical;
+  min-height: calc(2.2rem * 6);
+  background-image: linear-gradient(transparent calc(2.2rem - 1px), var(--letter-rule) 0);
+  background-size: 100% 2.2rem;
+  background-attachment: local;
+}
+
+.contact .letter input {
+  border-bottom: 1px solid var(--letter-rule);
+}
+
+.contact .letter ::placeholder {
+  color: rgb(59 42 32 / 38%);
+}
+
+.contact .letter input:focus,
+.contact .letter textarea:focus {
+  outline: none;
+}
+
+.contact .letter input:focus-visible,
+.contact .letter textarea:focus-visible {
+  box-shadow: 0 2px 0 var(--color-accent);
+}
+
+.contact .letter [aria-invalid="true"] {
+  box-shadow: 0 2px 0 var(--error);
+}
+
+.sign-off {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 30rem) {
+  .sign-off {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The name is the signature, so it is written a little larger */
+.contact .letter #letter-name {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.field-error {
+  min-height: 1.4em;
+  margin: 0.2rem 0 0;
+  color: var(--error);
+  font-family: system-ui, sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.letter-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.letter-status {
+  flex: 1 1 14rem;
+  margin: 0;
+  color: var(--error);
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+.letter-status:empty {
+  display: none;
+}
+
+.letter-status a {
+  color: inherit;
+}
+
+/* The Send button is a wax seal */
+.contact .letter .seal {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+  padding: 0.25rem 0.9rem 0.25rem 0.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--wax-dark);
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.contact .letter .seal:hover {
+  background-color: rgb(176 73 58 / 10%);
+}
+
+.contact .letter .seal:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.seal svg {
+  width: 3.4rem;
+  height: 3.4rem;
+  filter: drop-shadow(0 2px 2px rgb(60 20 10 / 35%));
+  transition: rotate 0.3s, scale 0.2s;
+}
+
+.seal:hover svg {
+  rotate: -12deg;
+}
+
+.seal:active svg {
+  scale: 0.92;
+}
+
+.seal-wax { fill: var(--wax); }
+.seal-ring { fill: none; stroke: var(--wax-dark); stroke-width: 2.5; }
+.seal text {
+  fill: var(--wax-dark);
+  font: 700 22px "Iowan Old Style", Georgia, serif;
+}
+
+.letter[aria-busy="true"] .seal {
+  cursor: progress;
+}
+
+.letter[aria-busy="true"] .seal svg {
+  animation: stamp 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes stamp {
+  to { scale: 0.88; rotate: 8deg; }
+}
+
+/* --- The rolled-up letter on its way to the bird --- */
+
+.roll {
+  position: absolute;
+  z-index: 10;
+  height: 28px;
+  border-radius: 14px;
+  background: linear-gradient(var(--parchment-edge), var(--parchment) 35%, #fffaf0 50%, var(--parchment) 65%, var(--parchment-edge));
+  box-shadow: 0 6px 14px -6px rgb(60 40 20 / 50%);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.roll::after {
+  content: "";
+  position: absolute;
+  inset: -2px calc(50% - 6px);
+  background-color: var(--wax);
+  border-radius: 2px;
+  opacity: var(--ribbon, 0);
+}
+
+/* --- After sending --- */
+
+.sent {
+  align-self: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.sent h2 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+.sent-note {
+  color: var(--ink-soft);
+}
+
+.sent .button {
+  margin-top: 0.75rem;
+  font: inherit;
+  cursor: pointer;
+}
