@@ -1,0 +1,689 @@
+/* --- Resume page: the resume as an open book, after the sandstone island on the home page --- */
+
+/* Warm paper and sandstone binding by day, deep navy and dark leather by night;
+   light-dark() follows the theme button through color-scheme */
+html:has(.resume-book) {
+  --paper: light-dark(#f4efe4, #11161f);
+  --page: light-dark(#fdf9ef, #1b212c);
+  --page-edge: light-dark(#eadfc6, #2a3240);
+  --ink: light-dark(#2b2520, #e8e3d6);
+  --ink-soft: light-dark(#5b5048, #b3bccb);
+  --ink-faint: light-dark(#86796a, #8590a2);
+  --rule: light-dark(#e3d5b8, #323b4a);
+  --gold: light-dark(#a3761f, #d9b062);
+  --link: light-dark(var(--color-accent), #8fb3ea);
+  --board: light-dark(#b8805c, #6e4630);
+  --board-hi: light-dark(#d9ad7f, #8e5f42);
+  --board-lo: light-dark(#9a6a48, #4a2e20);
+  --foil: light-dark(#fcf0d2, #f0d48f);
+  --ribbon: light-dark(#b0493a, #a8473a);
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --open-time: 1.5s;
+  --ease: cubic-bezier(0.55, 0.05, 0.25, 1);
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+.resume-book .site-header {
+  background-color: color-mix(in srgb, var(--paper) 85%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom-color: var(--rule);
+  color: var(--ink);
+}
+
+body.resume-book > .book-stage {
+  max-width: 74rem;
+  overflow-x: clip; /* the swinging cover never adds a sideways scroll */
+  padding-bottom: 3rem;
+}
+
+/* --- Replay, skip and print, above the book --- */
+
+.book-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.book-tools button {
+  padding: 0.45em 1.1em;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background-color: var(--page);
+  color: var(--ink-soft);
+  font: 500 0.85rem/1.4 system-ui;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.book-tools button:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+.book-tools button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.book-tools [hidden] {
+  display: none;
+}
+
+/* --- The book: binding boards with two pages laid on them --- */
+
+.book {
+  position: relative;
+  perspective: 2600px;
+  transition: transform var(--open-time) var(--ease);
+}
+
+.book-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 14px;
+  border-radius: 6px 10px 10px 6px;
+  background:
+    linear-gradient(to right, transparent 48%, rgb(0 0 0 / 22%) 50%, transparent 52%),
+    linear-gradient(160deg, var(--board-hi), var(--board) 45%, var(--board-lo));
+  box-shadow:
+    0 2px 0 var(--board-lo),
+    0 30px 60px -20px rgb(40 25 10 / 45%);
+}
+
+.page {
+  position: relative;
+  min-width: 0;
+  padding: 2.25rem 2.5rem 2rem;
+  background-color: var(--page);
+  color: var(--ink);
+  font: 0.95rem/1.55 var(--serif);
+}
+
+/* Page stacks at the outer edges, and the shade where each page dips into the spine */
+.page-left {
+  border-radius: 4px 0 0 4px;
+  background-image: linear-gradient(to left, rgb(60 40 20 / 14%), transparent 2.5rem);
+  box-shadow: -2px 1px 0 var(--page-edge), -4px 2px 0 var(--page), -6px 3px 0 var(--page-edge);
+}
+
+.page-right {
+  border-radius: 0 4px 4px 0;
+  background-image: linear-gradient(to right, rgb(60 40 20 / 14%), transparent 2.5rem);
+  box-shadow: 2px 1px 0 var(--page-edge), 4px 2px 0 var(--page), 6px 3px 0 var(--page-edge);
+}
+
+/* The ribbon bookmark hangs out of the bottom of the right page */
+.ribbon {
+  position: absolute;
+  bottom: -38px;
+  left: calc(50% + 3rem);
+  width: 18px;
+  height: 64px;
+  background: linear-gradient(to right, var(--ribbon), color-mix(in oklch, var(--ribbon), #fff 18%) 45%, var(--ribbon));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+}
+
+/* --- Type on the page --- */
+
+.page h1,
+.page h2,
+.page h3 {
+  font-family: var(--serif);
+}
+
+.running-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 1.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  font: 0.68rem/1.2 system-ui;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.masthead h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.masthead .headline {
+  margin: 0 0 0.4rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.masthead .contact {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.page a {
+  color: var(--link);
+  text-decoration-color: color-mix(in oklch, var(--gold), transparent 40%);
+  text-underline-offset: 0.18em;
+}
+
+.page a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Section titles: gold small caps with a rule running out to the margin */
+.page h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin: 2rem 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.page h2::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--rule);
+}
+
+.page section > p {
+  margin: 0 0 0.75rem;
+}
+
+/* Each entry: title on the left, its dates on the right, details below */
+.entry {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 1em;
+  align-items: baseline;
+  margin-bottom: 1.4rem;
+}
+
+.entry > * {
+  grid-column: 1 / -1;
+  margin: 0 0 0.2rem;
+}
+
+.entry > h3 {
+  grid-column: 1;
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.entry > .when {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.when {
+  font: 0.78rem/1.3 system-ui;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.entry .org {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.entry .note {
+  font-size: 0.88rem;
+  color: var(--ink-faint);
+}
+
+.page ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1em;
+}
+
+.page li {
+  margin-bottom: 0.25rem;
+}
+
+.page li::marker {
+  color: var(--gold);
+}
+
+.plain-list {
+  list-style: none;
+  padding-left: 0 !important;
+}
+
+.plain-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+}
+
+.page dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+}
+
+.page dt {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.page dd {
+  margin: 0;
+}
+
+.folio {
+  margin: 2.5rem 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
+.folio::before,
+.folio::after {
+  content: " — ";
+}
+
+.book-noscript {
+  text-align: center;
+}
+
+/* --- The cover, hinged at the spine --- */
+
+.cover {
+  position: absolute;
+  inset: 0 0 0 50%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: transform var(--open-time) var(--ease);
+}
+
+/* The faces fade, not the cover: opacity on the cover would flatten its 3D */
+.cover-front,
+.cover-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  transition: opacity 0.6s ease var(--open-time);
+}
+
+.cover-front {
+  display: grid;
+  padding: 1.5rem;
+  border-radius: 4px 10px 10px 4px;
+  background:
+    linear-gradient(to right, rgb(0 0 0 / 28%), transparent 22px),
+    radial-gradient(120% 80% at 30% 20%, rgb(255 255 255 / 16%), transparent 60%),
+    linear-gradient(160deg, var(--board-hi), var(--board) 50%, var(--board-lo));
+  box-shadow:
+    3px 3px 0 -1px var(--page),
+    6px 6px 0 -2px var(--page-edge),
+    0 30px 60px -20px rgb(40 25 10 / 50%);
+  color: var(--foil);
+}
+
+/* A gold-tooled double frame, with the title stamped in the middle */
+.cover-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  border: 1.5px solid color-mix(in oklch, var(--foil), transparent 25%);
+  border-radius: 3px;
+  outline: 1px solid color-mix(in oklch, var(--foil), transparent 55%);
+  outline-offset: 5px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 20%), 0 -1px 0 rgb(0 0 0 / 35%);
+}
+
+.cover-emblem {
+  width: min(55%, 12rem);
+  margin-bottom: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: drop-shadow(0 -1px 0 rgb(0 0 0 / 30%));
+}
+
+.cover-emblem .emblem-rock {
+  fill: color-mix(in oklch, currentColor, transparent 82%);
+}
+
+.cover-title {
+  margin: 0;
+  font: 600 clamp(1.6rem, 3.4vw, 2.6rem)/1.1 var(--serif);
+  letter-spacing: 0.04em;
+}
+
+.cover-subtitle {
+  margin: 0;
+  font: 0.8rem/1.4 var(--serif);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.cover-volume {
+  margin: 1.5rem 0 0;
+  font: italic 0.85rem/1.4 var(--serif);
+  opacity: 0.8;
+}
+
+/* The inside of the cover: binding board with an endpaper, which fades into the first page */
+.cover-back {
+  transform: rotateY(180deg);
+  border: 14px solid var(--board);
+  border-radius: 10px 6px 6px 10px;
+  background-color: var(--page-edge);
+}
+
+/* --- States: closed → open (the cover swings over) → settled --- */
+
+/* Until it settles the book is one window tall, with the pages faded out at the bottom */
+.book:not([data-state="settled"]) .book-body {
+  box-sizing: border-box;
+  width: 100%; /* so max-height trims the height, not the width the cover lines up with */
+  aspect-ratio: 1.45;
+  max-height: 82svh;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.book:not([data-state="settled"]) .page {
+  overflow: hidden;
+}
+
+.book:not([data-state="settled"]) .page::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 5rem;
+  background: linear-gradient(transparent, var(--page));
+}
+
+.book:not([data-state="settled"]) .ribbon {
+  display: none;
+}
+
+/* Closed: only the right half shows, under the cover, slid to the middle */
+.book[data-state="closed"] {
+  transform: translateX(-25%);
+}
+
+.book[data-state="closed"] .book-body {
+  clip-path: inset(0 0 0 50%);
+}
+
+/* Open: the cover swings over to the left, lands, and fades into the first page */
+.book[data-state="open"] .cover {
+  transform: rotateY(-180deg);
+  cursor: auto;
+}
+
+.book[data-state="open"] :is(.cover-front, .cover-back) {
+  opacity: 0;
+}
+
+.book[data-state="open"] .book-body {
+  clip-path: inset(0);
+  transition: clip-path 0s linear var(--open-time);
+}
+
+.book[data-state="settled"] .cover {
+  visibility: hidden;
+}
+
+/* Skip and replay jump straight between states */
+.book.instant,
+.book.instant * {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .book[data-state="settled"] .ribbon {
+    animation: ribbon-drop 0.6s var(--ease) both;
+  }
+}
+
+@keyframes ribbon-drop {
+  from {
+    height: 0;
+  }
+}
+
+/* --- Phones and narrow windows: one page, and the cover swings away to the left --- */
+
+@media (max-width: 62rem) {
+  .book-body {
+    grid-template-columns: 1fr;
+    background: linear-gradient(160deg, var(--board-hi), var(--board) 45%, var(--board-lo));
+  }
+
+  .page {
+    padding: 1.75rem 1.5rem;
+  }
+
+  /* The two pages run together as one */
+  .page-left {
+    border-radius: 4px 4px 0 0;
+    background-image: none;
+    box-shadow: none;
+    padding-bottom: 0;
+  }
+
+  .page-right {
+    border-radius: 0 0 4px 4px;
+    background-image: none;
+    box-shadow: none;
+    padding-top: 0;
+  }
+
+  .page-left .folio,
+  .page-right .running-head {
+    display: none;
+  }
+
+  .ribbon {
+    left: auto;
+    right: 2rem;
+  }
+
+  .cover {
+    inset: 0;
+  }
+
+  .book:not([data-state="settled"]) .book-body {
+    aspect-ratio: 0.72;
+  }
+
+  .book:not([data-state="settled"]) .page-right {
+    display: none;
+  }
+
+  .book[data-state="closed"] {
+    transform: none;
+  }
+
+  .book[data-state="closed"] .book-body {
+    clip-path: none;
+  }
+
+  .book[data-state="open"] .cover {
+    transform: rotateY(-110deg);
+  }
+
+  .cover-front,
+  .cover-back {
+    transition: opacity 0.7s ease calc(var(--open-time) * 0.45);
+  }
+}
+
+@media (max-width: 40rem) {
+  /* Dates drop under the title; skill names sit above their lists */
+  .entry > .when {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    margin-bottom: 0.15rem;
+  }
+
+  .page dl {
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+
+  .page dd {
+    margin-bottom: 0.6rem;
+  }
+
+  .plain-list li {
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Reduced motion: no swing, no slide; replay fades the cover away */
+@media (prefers-reduced-motion: reduce) {
+  .cover {
+    inset: 0;
+  }
+
+  .book[data-state="closed"] {
+    transform: none;
+  }
+
+  .book[data-state="closed"] .book-body {
+    clip-path: none;
+  }
+
+  .book[data-state="open"] .cover {
+    transform: none;
+  }
+
+  .cover-front,
+  .cover-back {
+    transition: opacity 0.5s ease;
+  }
+}
+
+/* --- Print: a plain resume, no book --- */
+
+@media print {
+  @page {
+    margin: 0.6in;
+  }
+
+  html:has(.resume-book) {
+    color-scheme: light !important;
+    background: #fff;
+    color: #000;
+  }
+
+  .site-header,
+  .book-tools,
+  .cover,
+  .ribbon,
+  .running-head,
+  .folio,
+  .book-noscript {
+    display: none !important;
+  }
+
+  body.resume-book {
+    padding: 0;
+  }
+
+  body.resume-book > .book-stage {
+    max-width: none;
+    padding: 0;
+  }
+
+  .book {
+    transform: none !important;
+  }
+
+  .book .book-body {
+    display: block;
+    aspect-ratio: auto !important;
+    max-height: none !important;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    clip-path: none !important;
+  }
+
+  .book .page {
+    display: block !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: none;
+    box-shadow: none;
+    color: #000;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+
+  .book .page::after {
+    display: none;
+  }
+
+  .masthead h1 {
+    font-size: 22pt;
+  }
+
+  .page h2 {
+    margin: 14pt 0 6pt;
+    color: #000;
+    break-after: avoid;
+  }
+
+  .page h2::after {
+    background-color: #999;
+  }
+
+  .masthead .headline,
+  .masthead .contact,
+  .entry .org,
+  .entry .note,
+  .when {
+    color: #333;
+  }
+
+  .entry {
+    margin-bottom: 8pt;
+    break-inside: avoid;
+  }
+
+  .page li::marker {
+    color: #000;
+  }
+
+  .page a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  /* Links can't be clicked on paper, so print where they go */
+  .page a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #444;
+  }
+}
