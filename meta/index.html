@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meta | Rami Abukhater</title>
+    <link rel="stylesheet" href="../style.css" />
+    <script type="module" src="../global.js"></script>
+    <script type="module" src="main.js"></script>
+  </head>
+  <body class="meta">
+    <header class="site-header">
+      <a class="brand" href="../">Rami Abukhater</a>
+    </header>
+
+    <main>
+      <h1>Meta</h1>
+      <p>
+        This page looks at the code behind this website: every line, which commit
+        last touched it, and when. The data comes from <code>git blame</code>,
+        collected with <a href="https://www.npmjs.com/package/elocuent" target="_blank">elocuent</a>.
+      </p>
+
+      <h2>Summary</h2>
+      <div id="stats"></div>
+
+      <h2>Commits by time of day</h2>
+      <p class="meta-hint">
+        Each dot is a commit, sized by the lines it still owns. Hover for details,
+        or drag a box to select commits.
+      </p>
+      <div id="chart"></div>
+
+      <p id="selection-count">No commits selected</p>
+      <dl id="language-breakdown" class="stats"></dl>
+    </main>
+
+    <dl id="commit-tooltip" class="info tooltip" hidden>
+      <dt>Commit</dt>
+      <dd>
+        <a href="" id="commit-link" target="_blank"></a>
+      </dd>
+
+      <dt>Date</dt>
+      <dd id="commit-date"></dd>
+
+      <dt>Time</dt>
+      <dd id="commit-time"></dd>
+
+      <dt>Author</dt>
+      <dd id="commit-author"></dd>
+
+      <dt>Lines edited</dt>
+      <dd id="commit-lines"></dd>
+    </dl>
+  </body>
+</html>
