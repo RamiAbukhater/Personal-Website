@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "elocuent": "^0.0.4"
+  },
+  "scripts": {
+    "loc": "node --require ./meta/elocuent-windows-fix.cjs node_modules/elocuent/bin/elocuent.js -d . -o meta/loc.csv --spaces 2"
+  }
+}

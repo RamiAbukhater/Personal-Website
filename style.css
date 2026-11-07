@@ -274,7 +274,8 @@ form button {
 /* --- Home page: the 3D island fills the window behind the hero --- */
 
 /* Home palette: warm paper by day, deep navy by night; light-dark() follows color-scheme */
-html:has(.home) {
+html:has(.home),
+html:has(.meta) {
   --paper: light-dark(#fbf9f4, #11161f);
   --panel: light-dark(#f4f1e8, #161c27);
   --surface: light-dark(#fff, #1d2431);
@@ -1342,4 +1343,165 @@ body.home > .projects-intro {
     max-width: none;
     margin-block: 1.5rem auto;
   }
+}
+
+/* --- Meta page: code stats, commit scatterplot, tooltip, brush --- */
+
+.meta h1,
+.meta h2 {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  color: var(--ink);
+}
+
+.meta-hint {
+  color: var(--ink-soft);
+}
+
+/* Same look as the home page's GitHub stats: small caps labels over big numbers */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  gap: 0.25rem 1rem;
+  margin: 1rem 0 0;
+}
+
+.stats dt {
+  grid-row: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.stats dd {
+  grid-row: 2;
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Summary has eight stats: wrap into two rows of four */
+#stats .stats {
+  grid-auto-flow: row;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: none;
+}
+
+#stats .stats dt:nth-of-type(n + 5) {
+  grid-row: 3;
+  margin-top: 1rem;
+}
+
+#stats .stats dd:nth-of-type(n + 5) {
+  grid-row: 4;
+}
+
+@media (max-width: 40rem) {
+  #stats .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #stats .stats dt,
+  #stats .stats dd {
+    grid-row: auto !important;
+  }
+}
+
+#chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink-soft);
+}
+
+.gridlines .tick line {
+  stroke: var(--ink-faint);
+  stroke-opacity: 0.2;
+}
+
+.gridlines .domain {
+  display: none;
+}
+
+#chart circle {
+  transition: 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+#chart circle:hover {
+  transform: scale(1.5);
+}
+
+#chart circle.selected {
+  fill: #ff6b6b;
+}
+
+@keyframes marching-ants {
+  to {
+    stroke-dashoffset: -8; /* 5 + 3 */
+  }
+}
+
+#chart .selection {
+  fill-opacity: 0.1;
+  stroke: currentColor;
+  stroke-opacity: 0.7;
+  stroke-dasharray: 5 3;
+  animation: marching-ants 2s linear infinite;
+}
+
+#selection-count {
+  margin-top: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+dl.info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.info dt {
+  font-weight: 400;
+  color: var(--ink-faint);
+}
+
+dl.info dd {
+  margin: 0;
+  color: var(--ink);
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Beats the centred-column rule for body children */
+body > .tooltip {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  z-index: 2;
+  max-width: 22rem;
+  margin: 0.75rem 0 0 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  background-color: color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 15%);
+}
+
+#language-breakdown dd {
+  font-size: 1.1rem;
 }
