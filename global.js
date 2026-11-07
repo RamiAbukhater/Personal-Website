@@ -144,7 +144,9 @@ function sitePath(path) {
   return /^(https?:)?\/\//.test(path) ? path : BASE_PATH + path;
 }
 
-export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+// The projects page passes { style: 'card' } for its illustrated GitHub cards;
+// everywhere else gets the plain article layout
+export function renderProjects(projects, containerElement, headingLevel = 'h2', { style = 'plain' } = {}) {
   if (!(containerElement instanceof Element)) {
     console.error('renderProjects needs a container element, got', containerElement);
     return;
@@ -164,6 +166,11 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
   }
 
   for (let project of projects) {
+    if (style === 'card') {
+      containerElement.appendChild(projectCard(project, headingLevel));
+      continue;
+    }
+
     const article = document.createElement('article');
 
     // Bullet points when the project has them, otherwise the one-line description
@@ -184,6 +191,44 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
 
     containerElement.appendChild(article);
   }
+}
+
+// One illustrated card: island art, status line, title, summary, tags, and links.
+// repo: a URL, null while the repo link is still to be added, or false for no GitHub link.
+function projectCard(project, headingLevel) {
+  const article = document.createElement('article');
+  article.className = 'project-card';
+
+  let status =
+    project.badge === 'current' ? '<span class="status current">Current</span>'
+    : project.badge === 'award' ? `<span class="status award">${project.badgeText ?? 'Award'}</span>`
+    : `<span class="status">${project.year}</span>`;
+
+  // TODO repo links point at the GitHub profile until the real repo is added
+  let repo =
+    project.repo === false ? ''
+    : project.repo ? `<a class="repo" href="${project.repo}" target="_blank">GitHub</a>`
+    : '<a class="repo" href="https://github.com/RamiAbukhater" target="_blank" data-todo="repo-url">GitHub</a>';
+
+  // A second link only when it goes somewhere other than the repo
+  let more = project.url && project.url !== project.repo
+    ? `<a class="more" href="${sitePath(project.url)}" target="_blank">${project.moreText ?? project.linkText ?? 'Learn more'}</a>`
+    : '';
+
+  article.innerHTML = `
+    <div class="art">
+      <img src="${sitePath(project.image ?? 'https://dsc106.com/labs/lab02/images/empty.svg')}" width="400" height="250" alt="${project.alt ?? ''}" loading="lazy" />
+    </div>
+    <div class="body">
+      <p class="meta">${status}${project.meta ? ` <span>${project.meta}</span>` : ''}</p>
+      <${headingLevel}>${project.shortTitle ?? project.title}</${headingLevel}>
+      <p class="summary">${project.summary ?? project.description ?? ''}</p>
+      ${project.tags?.length ? `<ul class="tags" aria-label="Tags">${project.tags.map((t) => `<li>${t}</li>`).join('')}</ul>` : ''}
+      <div class="actions">${repo}${more}</div>
+    </div>
+  `;
+
+  return article;
 }
 
 export async function fetchGitHubData(username) {

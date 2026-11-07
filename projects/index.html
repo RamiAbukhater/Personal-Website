@@ -5,30 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Projects | Rami Abukhater</title>
     <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="projects.css" />
     <script type="module" src="../global.js"></script>
     <script type="module" src="projects.js"></script>
   </head>
-  <body>
+  <body class="projects-page">
     <header class="site-header">
       <a class="brand" href="../">Rami Abukhater</a>
     </header>
 
-    <h1 class="projects-title">Projects</h1>
+    <!--
+      Projects live in lib/projects.json. projects.js sorts them into the field
+      sections below by their "field" and renders each as an illustrated card
+      (island art drawn by projects/art/build-art.mjs). A project whose "repo"
+      is null still needs its GitHub repo URL; its card links to the profile
+      until then.
+    -->
+    <main>
+      <section class="projects-intro">
+        <p class="eyebrow">Things I have built and studied</p>
+        <h1 class="projects-title">Projects</h1>
+        <p class="lede">
+          Research, robots, and the tools in between. Each little island stands
+          for one project; follow it to the code on GitHub.
+        </p>
+        <ul class="field-links" aria-label="Jump to a field">
+          <li><a href="#minds" style="--tint: #e0aa45">Minds &amp; Machines</a></li>
+          <li><a href="#robotics" style="--tint: #cc7650">Robotics &amp; Embodied AI</a></li>
+          <li><a href="#perception" style="--tint: #5f9e93">Perception &amp; Simulation</a></li>
+          <li><a href="#tools" style="--tint: #7f9452">Data &amp; Web Tools</a></li>
+        </ul>
+      </section>
 
-    <section>
-      <h2>Current Projects</h2>
+      <section class="field" id="minds" aria-labelledby="minds-title" style="--tint: #e0aa45">
+        <header>
+          <h2 id="minds-title">Minds &amp; Machines</h2>
+          <p>How people and language models form goals, make decisions, and come to seem like someone.</p>
+        </header>
+        <div class="project-grid" data-field="minds"></div>
+      </section>
 
-      <div class="projects" id="current-projects">
-        <!-- Filled in by projects.js from lib/projects.json -->
-      </div>
-    </section>
+      <section class="field" id="robotics" aria-labelledby="robotics-title" style="--tint: #cc7650">
+        <header>
+          <h2 id="robotics-title">Robotics &amp; Embodied AI</h2>
+          <p>Machines that see, decide, and move in the physical world.</p>
+        </header>
+        <div class="project-grid" data-field="robotics"></div>
+      </section>
 
-    <section>
-      <h2>Past Projects</h2>
+      <section class="field" id="perception" aria-labelledby="perception-title" style="--tint: #5f9e93">
+        <header>
+          <h2 id="perception-title">Perception &amp; Simulation</h2>
+          <p>Turning cameras, LiDAR, 3D scans, and sound into models a machine can use.</p>
+        </header>
+        <div class="project-grid" data-field="perception"></div>
+      </section>
 
-      <div class="projects" id="past-projects">
-        <!-- Filled in by projects.js from lib/projects.json -->
-      </div>
-    </section>
+      <section class="field" id="tools" aria-labelledby="tools-title" style="--tint: #7f9452">
+        <header>
+          <h2 id="tools-title">Data &amp; Web Tools</h2>
+          <p>Practical software built end to end: optimizers, data pipelines, and full-stack apps.</p>
+        </header>
+        <div class="project-grid" data-field="tools"></div>
+      </section>
+    </main>
   </body>
 </html>

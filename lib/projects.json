@@ -4,8 +4,8 @@
     "year": "2026",
     "status": "current",
     "date": "2026 – Present",
-    "image": "images/projects/via.jpg",
-    "alt": "White robotic arm in a showroom",
+    "image": "images/projects/islands/via.svg",
+    "alt": "A low-poly robot arm reaching over a table to pick up a gold block, watched by a camera on a post",
     "stack": "Python · PyTorch · SigLIP · RSSM world model · active inference · LIBERO",
     "description": "A vision-language-action model that infers a latent world state instead of mapping observations straight to actions.",
     "bullets": [
@@ -13,25 +13,49 @@
       "Trained on the LIBERO spatial suite (432 demonstrations) on UCSD DSMLP A5000 GPUs, root-causing a belief-state variance collapse to the absence of occlusions in the demonstration data."
     ],
     "url": "https://github.com/RamiAbukhater/via-model",
-    "linkText": "View the code on GitHub"
+    "linkText": "View the code on GitHub",
+    "field": "robotics",
+    "shortTitle": "VIA, a Cognitively Grounded VLA Model",
+    "badge": "current",
+    "meta": "2026",
+    "summary": "A vision-language-action model that infers a latent world state and plans over it, instead of mapping pixels straight to actions.",
+    "tags": [
+      "PyTorch",
+      "SigLIP",
+      "RSSM world model",
+      "Active inference",
+      "LIBERO"
+    ],
+    "repo": "https://github.com/RamiAbukhater/via-model"
   },
   {
     "title": "Room Mesh to MuJoCo Simulation Environment",
     "year": "2026",
     "status": "current",
     "date": "2026 – Present",
-    "image": "images/projects/room-mesh.jpg",
-    "alt": "Empty room with a wood floor and a large window",
+    "image": "images/projects/islands/room-mesh.svg",
+    "alt": "A small room whose left half is solid stone and whose right half dissolves into a triangle mesh",
     "stack": "Python · MuJoCo · 3D mesh processing",
-    "description": "Building a pipeline that turns a scanned 3D room mesh into a simulation-ready MuJoCo environment, so real captured spaces can be used directly as robot-learning scenes."
+    "description": "Building a pipeline that turns a scanned 3D room mesh into a simulation-ready MuJoCo environment, so real captured spaces can be used directly as robot-learning scenes.",
+    "field": "perception",
+    "shortTitle": "Room Mesh to MuJoCo",
+    "badge": "current",
+    "meta": "2026",
+    "summary": "A pipeline that turns a scanned 3D room into a simulation-ready MuJoCo scene, so real spaces become robot-learning environments.",
+    "tags": [
+      "Python",
+      "MuJoCo",
+      "3D mesh processing"
+    ],
+    "repo": null
   },
   {
     "title": "Macro Optimizer, Constrained Meal Optimization",
     "year": "2026",
     "status": "current",
     "date": "2026",
-    "image": "images/projects/macro-optimizer.jpg",
-    "alt": "Glass meal-prep containers filled with rice and vegetables",
+    "image": "images/projects/islands/macro-optimizer.svg",
+    "alt": "Three meal bowls on a table beside three bars of different heights and a small stack of gold coins",
     "stack": "Python · PuLP/CBC integer linear programming · Flask · pytest",
     "description": "An integer-linear-programming engine that plans the cheapest UCSD campus meals that hit daily macro targets.",
     "bullets": [
@@ -39,21 +63,42 @@
       "Integrated live nutrition data from UCSD Dining, Open Food Facts, and USDA FoodData Central behind a Flask app and weekly menu planner with anti-repetition and time-budget constraints, backed by a pytest suite."
     ],
     "url": "https://github.com/RamiAbukhater/Macro-Optimizer",
-    "linkText": "View the code on GitHub"
+    "linkText": "View the code on GitHub",
+    "field": "tools",
+    "shortTitle": "Macro Optimizer",
+    "meta": "",
+    "summary": "An integer-programming engine that finds the cheapest UC San Diego campus meals hitting daily macro targets on a dining-dollar budget.",
+    "tags": [
+      "Python",
+      "PuLP / CBC",
+      "Flask",
+      "pytest"
+    ],
+    "repo": "https://github.com/RamiAbukhater/Macro-Optimizer"
   },
   {
     "title": "PiCar Lane Following and Obstacle Avoidance",
     "year": "2026",
     "status": "current",
     "date": "2026",
-    "image": "images/projects/picar.jpg",
-    "alt": "Small toy car driving over rocks",
+    "image": "images/projects/islands/picar.svg",
+    "alt": "A small car following a lane, with a dashed path curving around rocks in the road ahead",
     "stack": "Python · computer vision · vision-language models",
     "description": "Real-time lane following and obstacle avoidance on a PiCar, with a vision-language model helping make driving decisions.",
     "bullets": [
       "Built real-time lane-following and obstacle-avoidance control on a PiCar platform using computer vision for lane detection.",
       "Prototyped a vision-language-model decision manager using scene understanding to inform real-time driving decisions (course project, DSC 190)."
-    ]
+    ],
+    "field": "robotics",
+    "shortTitle": "PiCar Lane Following",
+    "meta": "DSC 190 course project",
+    "summary": "Real-time lane following and obstacle avoidance on a PiCar, with a vision-language model prototyped as its decision manager.",
+    "tags": [
+      "Python",
+      "Computer vision",
+      "Vision-language models"
+    ],
+    "repo": null
   },
   {
     "title": "Selene Nanorobotics, Sensing & Navigation for Root-Canal Microrobots",
@@ -64,58 +109,127 @@
     "alt": "A tooth with a microrobot inside one root canal, linked by dashed lines to four sensors around it",
     "description": "Selene is building magnetically steered microrobots that clear bacterial biofilm from inside root canals. I lead sensor simulation and navigation, building the simulator that works out how to tell where a robot is inside the canal, and turning it into a tool that searches for better robot designs and sensor layouts. Specifics are under NDA.",
     "url": "https://selenenanorobotics.com/",
-    "linkText": "Visit Selene"
+    "linkText": "Visit Selene",
+    "field": "robotics",
+    "shortTitle": "Selene Nanorobotics",
+    "badge": "current",
+    "meta": "Sensing & navigation lead",
+    "summary": "Simulating how to sense where a magnetically steered microrobot is inside a root canal, and searching for better robot and sensor designs.",
+    "tags": [
+      "Simulation",
+      "Sensing",
+      "Microrobotics"
+    ],
+    "repo": false,
+    "moreText": "Visit Selene"
   },
   {
     "title": "Triton AI, Perception for an Autonomous Vehicle",
     "year": "2026",
     "status": "current",
     "date": "Sept 2026 – Present",
-    "image": "images/projects/triton-ai.svg",
-    "alt": "A car seen from above, with front and rear camera views and rings of LiDAR points around it",
-    "description": "On UC San Diego's student autonomy team, I brought up our vehicle's first full sensing suite: front and rear cameras plus a 360° LiDAR, calibrated into one synchronized view of the world."
+    "image": "images/projects/islands/triton-ai.svg",
+    "alt": "A car on a small test track, ringed by LiDAR sweeps, with camera views cast to the front and rear",
+    "description": "On UC San Diego's student autonomy team, I brought up our vehicle's first full sensing suite: front and rear cameras plus a 360° LiDAR, calibrated into one synchronized view of the world.",
+    "field": "perception",
+    "shortTitle": "Autonomous Vehicle Perception",
+    "badge": "current",
+    "meta": "Triton AI",
+    "summary": "Brought up the first full sensing suite on UC San Diego's student race car: front and rear cameras and a 360° LiDAR in one calibrated view.",
+    "tags": [
+      "LiDAR",
+      "Camera calibration",
+      "Sensor fusion"
+    ],
+    "repo": null
   },
   {
     "title": "Why We Procrastinate, Reinforcement Learning Research",
     "year": "2026",
     "status": "current",
     "date": "July 2026 – Present",
-    "image": "images/projects/procrastination.svg",
-    "alt": "Bar chart where effort stays low over time and spikes just before a deadline, under a rising curve of discounted value",
+    "image": "images/projects/islands/procrastination.svg",
+    "alt": "A clock tower over a row of low steps that leap up just before a deadline flag",
     "description": "In Prof. Lucy Lai's group in UC San Diego Cognitive Science, I am rewriting the Bellman equation so agents procrastinate the way people do, then fitting them to human data to test whether discounting the future is enough to explain it.",
     "url": "https://lucylai.com/research.html",
-    "linkText": "About the lab"
+    "linkText": "About the lab",
+    "field": "minds",
+    "shortTitle": "Why We Procrastinate",
+    "badge": "current",
+    "meta": "Lai Lab, UC San Diego",
+    "summary": "Rewriting the Bellman equation so reinforcement-learning agents put things off the way people do, then fitting them to human data.",
+    "tags": [
+      "Reinforcement learning",
+      "Cognitive modeling",
+      "Python"
+    ],
+    "repo": null
   },
   {
     "title": "DataWorks, AI Interpretability Lab",
     "year": "2026",
     "status": "current",
     "date": "2026 – Present",
-    "image": "images/projects/interpretability-lab.svg",
-    "alt": "Persona points spread along one axis, from other personas to the Assistant, with a dashed line marking the activation cap",
+    "image": "images/projects/islands/interpretability-lab.svg",
+    "alt": "A row of pillars along a straight axis, rising towards a glowing gold pillar behind a gate",
     "description": "I lead an AI interpretability lab inside UC San Diego's student data science organization, working through Anthropic's <cite>The Assistant Axis</cite>, which finds a single activation direction tracking how much a model acts as its Assistant persona.",
     "url": "https://www.anthropic.com/research/assistant-axis",
-    "linkText": "Read the paper"
+    "linkText": "Read the paper",
+    "field": "minds",
+    "shortTitle": "The Assistant Axis, Interpretability Lab",
+    "badge": "current",
+    "meta": "DataWorks lab lead",
+    "summary": "Leading a student lab through Anthropic's Assistant Axis: one activation direction that tracks persona, and what capping drift along it does.",
+    "tags": [
+      "Interpretability",
+      "Activation steering",
+      "LLMs"
+    ],
+    "moreText": "The paper",
+    "repo": null
   },
   {
     "title": "DataWorks, Audio-Perception Lab",
     "year": "2026",
     "status": "current",
     "date": "2026 – Present",
-    "image": "images/projects/audio-lab.svg",
-    "alt": "A sound wave turned into a log-mel spectrogram, then into tokens feeding a transformer",
-    "description": "I lead an audio-perception lab building a shared pipeline that turns raw sound into tokens a multimodal transformer can read, then testing whether one general model can match classifiers built for a single task."
+    "image": "images/projects/islands/audio-lab.svg",
+    "alt": "A round tower sending out rings of sound over a field of spectrogram bars beside a stacked block",
+    "description": "I lead an audio-perception lab building a shared pipeline that turns raw sound into tokens a multimodal transformer can read, then testing whether one general model can match classifiers built for a single task.",
+    "field": "perception",
+    "shortTitle": "Audio-Perception Lab",
+    "badge": "current",
+    "meta": "DataWorks lab lead",
+    "summary": "Leading a student lab that turns raw sound into tokens a multimodal transformer can read, and tests one model against task-specific classifiers.",
+    "tags": [
+      "Log-mel spectrograms",
+      "Transformers",
+      "Audio ML"
+    ],
+    "repo": null
   },
   {
     "title": "The Social Adjacency of LLMs, Working Paper",
     "year": "2026",
     "status": "current",
     "date": "2026 – Present",
-    "image": "images/projects/social-adjacency.svg",
-    "alt": "A person beside their friends, trading chat messages with a language model",
+    "image": "images/projects/islands/social-adjacency.svg",
+    "alt": "A circle of small figures trading speech bubbles with a softly glowing standing stone",
     "description": "With a colleague at UC Berkeley, I am writing a paper on why we treat LLMs as socially adjacent beings, building on David Chalmers' <cite>What We Talk to When We Talk to Language Models</cite> and Daniel Dennett's <cite>True Believers</cite>.",
     "url": "https://news.berkeley.edu/2026/07/10/berkeley-talks-when-we-talk-to-ai-what-are-we-talking-to/",
-    "linkText": "Hear Chalmers' talk"
+    "linkText": "Hear Chalmers' talk",
+    "field": "minds",
+    "shortTitle": "The Social Adjacency of LLMs",
+    "badge": "current",
+    "meta": "Working paper",
+    "summary": "A paper with a UC Berkeley colleague on why we treat language models as socially adjacent beings, building on Chalmers and Dennett.",
+    "tags": [
+      "Philosophy of mind",
+      "LLMs",
+      "Intentional stance"
+    ],
+    "moreText": "Chalmers' talk",
+    "repo": null
   },
   {
     "title": "AI Alignment at UC San Diego, Intro Fellowship",
@@ -126,29 +240,51 @@
     "alt": "An eight-week timeline marking interpretability, RLHF, AI policy, and catastrophic risk, beside a stack of papers",
     "description": "An 8-week introduction to AI alignment adapted from MIT AI Alignment and BlueDot Impact materials, covering interpretability, RLHF, AI policy, and catastrophic risk.",
     "url": "https://aialignmentatucsd.org/",
-    "linkText": "Visit AIA"
+    "linkText": "Visit AIA",
+    "field": "minds",
+    "shortTitle": "AI Alignment Intro Fellowship",
+    "badge": "current",
+    "meta": "AI Alignment at UC San Diego",
+    "summary": "An 8-week introduction to AI alignment covering interpretability, RLHF, AI policy, and catastrophic risk.",
+    "tags": [
+      "AI safety",
+      "Teaching"
+    ],
+    "repo": false,
+    "moreText": "Visit AIA"
   },
   {
     "title": "BinTek, CV-Assisted Data Pipeline",
     "year": "2026",
     "status": "past",
     "date": "January 2026",
-    "image": "images/projects/bintek.jpg",
-    "alt": "Red, yellow, and green waste bins",
+    "image": "images/projects/islands/bintek.svg",
+    "alt": "Three colored waste bins under a camera on a pole, one outlined in a detection box, beside a stack of database disks",
     "stack": "Python · FastAPI · PostgreSQL",
     "description": "A FastAPI and PostgreSQL pipeline that classifies waste with a computer-vision API.",
     "bullets": [
       "Built a FastAPI backend with a PostgreSQL database for data ingestion, cleaning, storage, and statistical analysis.",
       "Integrated the Eyepop.ai computer-vision API for automated data collection and waste classification."
-    ]
+    ],
+    "field": "tools",
+    "shortTitle": "BinTek",
+    "meta": "",
+    "summary": "A FastAPI and PostgreSQL pipeline that gathers waste-sorting data through the Eyepop.ai vision API, then cleans and analyses it.",
+    "tags": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "Eyepop.ai"
+    ],
+    "repo": null
   },
   {
     "title": "Menu Generator, Full-Stack Web App",
     "year": "2025",
     "status": "past",
     "date": "July 2025",
-    "image": "images/projects/menu-generator.jpg",
-    "alt": "Family eating together at a table",
+    "image": "images/projects/islands/menu-generator.svg",
+    "alt": "A long dinner table set with plates, a menu board beside it and a small server box with glowing lights",
     "stack": "React/Node.js · Spring Boot REST API · MariaDB",
     "description": "A full-stack menu-planning web app, from database schema to production deployment.",
     "bullets": [
@@ -156,20 +292,44 @@
       "Designed the data model, REST endpoints, and a responsive UI, owning the system from schema through production deployment."
     ],
     "url": "https://github.com/RamiAbukhater/Menu-Gen",
-    "linkText": "View the code on GitHub"
+    "linkText": "View the code on GitHub",
+    "field": "tools",
+    "shortTitle": "Menu Generator",
+    "meta": "",
+    "summary": "A full-stack menu planner, from data model to production, with a React front end, Spring Boot API, and self-hosted MariaDB.",
+    "tags": [
+      "React",
+      "Node.js",
+      "Spring Boot",
+      "MariaDB"
+    ],
+    "repo": "https://github.com/RamiAbukhater/Menu-Gen"
   },
   {
     "title": "RoboNurse",
     "year": "2024",
     "status": "past",
     "date": "May 2024, DA Hacks 3.5 hackathon award winner",
-    "image": "images/projects/robonurse.jpg",
-    "alt": "Arduino circuit board",
+    "image": "images/projects/islands/robonurse.svg",
+    "alt": "A friendly wheeled robot with a red cross on its chest, beside a bed, its antenna glowing",
     "stack": "Arduino (C++) · Raspberry Pi (Python) · ChatGPT API",
     "description": "A nursing-assistant robot that listens to symptoms and analyses them.",
     "bullets": [
       "Programmed Arduino in C++ for movement and Raspberry Pi in Python for speech processing in a nursing-assistant robot.",
       "Integrated the ChatGPT API for symptom analysis."
-    ]
+    ],
+    "field": "robotics",
+    "shortTitle": "RoboNurse",
+    "badge": "award",
+    "badgeText": "Award winner",
+    "meta": "DA Hacks 3.5, 2024",
+    "summary": "A nursing-assistant robot that drives on an Arduino, listens on a Raspberry Pi, and uses ChatGPT to analyse symptoms.",
+    "tags": [
+      "Arduino C++",
+      "Raspberry Pi",
+      "Python",
+      "ChatGPT API"
+    ],
+    "repo": null
   }
 ]

@@ -1,0 +1,388 @@
+/* --- Projects page: fields of illustrated project cards --- */
+
+/* Same palette as the home page: warm paper by day, deep navy by night */
+html:has(.projects-page) {
+  --paper: light-dark(#fbf9f4, #11161f);
+  --panel: light-dark(#f4f1e8, #161c27);
+  --surface: light-dark(#fff, #1d2431);
+  --rule: light-dark(#e4ded1, #2b3442);
+  --ink: light-dark(#1b2a41, #e8e3d6);
+  --ink-soft: light-dark(#4a5566, #b3bccb);
+  --ink-faint: light-dark(#6b7380, #8590a2);
+  --link: light-dark(var(--color-accent), #8fb3ea);
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --mono: ui-monospace, Consolas, monospace;
+  background-color: var(--paper);
+}
+
+.projects-page {
+  color: var(--ink);
+}
+
+.projects-page .site-header {
+  background-color: color-mix(in srgb, var(--paper) 85%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom-color: var(--rule);
+}
+
+body.projects-page > main {
+  max-width: 76rem;
+  padding-inline: 2rem;
+}
+
+.projects-page h1,
+.projects-page h2,
+.projects-page h3 {
+  font-family: var(--serif);
+  color: var(--ink);
+}
+
+/* --- Intro --- */
+
+.projects-intro {
+  padding-block: 2.5rem 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--link);
+}
+
+.projects-page h1 {
+  margin: 0.5rem 0 0;
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  max-width: 38rem;
+  margin: 1.25rem 0 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--color-gold);
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+}
+
+/* Shortcuts to each field, each with its colour dot */
+.field-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.field-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background-color: var(--surface);
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--ink-soft);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.field-links a::before,
+.field h2::before {
+  content: "";
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border: 2px solid var(--tint);
+  border-radius: 50%;
+  background-color: color-mix(in oklch, var(--tint) 30%, var(--surface));
+}
+
+.field-links a:hover,
+.field-links a:focus-visible {
+  border-color: var(--tint);
+  color: var(--ink);
+}
+
+/* --- Fields --- */
+
+.field {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+  scroll-margin-top: 5rem; /* clear of the sticky header */
+}
+
+.field header {
+  margin-bottom: 1.5rem;
+}
+
+.field h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+}
+
+.field h2::before {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.field header p {
+  max-width: 40rem;
+  margin: 0.5rem 0 0;
+  color: var(--ink-soft);
+}
+
+/* As many cards across as fit, the same width in every field */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr));
+  gap: 1.5rem;
+}
+
+/* --- Cards --- */
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 0.875rem;
+  background-color: var(--surface);
+  box-shadow: 0 1px 3px rgb(27 42 65 / 6%);
+  transition: translate 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.project-card:hover,
+.project-card:focus-within {
+  translate: 0 -3px;
+  border-color: color-mix(in oklch, var(--tint) 55%, var(--rule));
+  box-shadow: 0 12px 28px rgb(27 42 65 / 12%);
+}
+
+/* The illustration sits in its own sky: warm daylight, or a starry night */
+.art {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background:
+    radial-gradient(circle at 78% 18%, light-dark(rgb(255 214 130 / 45%), rgb(214 224 255 / 16%)), transparent 32%),
+    linear-gradient(light-dark(#fff6e6, #222c46), light-dark(#f4e6cb, #151b2a));
+  border-bottom: 1px solid var(--rule);
+}
+
+/* A few stars, only visible at night */
+.art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 20%, light-dark(transparent, #fffaf0aa), transparent),
+    radial-gradient(1px 1px at 30% 8%, light-dark(transparent, #fffaf088), transparent),
+    radial-gradient(1.5px 1.5px at 88% 62%, light-dark(transparent, #fffaf077), transparent),
+    radial-gradient(1px 1px at 64% 12%, light-dark(transparent, #fffaf0aa), transparent),
+    radial-gradient(1px 1px at 8% 70%, light-dark(transparent, #fffaf066), transparent);
+}
+
+.art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: translate 0.6s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+
+/* By night the sandstone is lit by the moon: multiplying by a cool blue
+   leaves the day palette alone and cools and dims it after dark */
+.art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: light-dark(transparent, #a9b5de);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* The island drifts up a little when its card is pointed at */
+.project-card:hover .art img,
+.project-card:focus-within .art img {
+  translate: 0 -6px;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  margin: 0 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--ink-soft);
+}
+
+/* Green dot on ongoing projects, as on the home page's roles */
+.status.current::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background-color: #2fb36a;
+}
+
+.status.award {
+  border-color: color-mix(in oklch, var(--color-gold) 60%, transparent);
+  color: light-dark(#8a6418, var(--color-gold));
+}
+
+.status.award::before {
+  content: "★";
+  color: var(--color-gold);
+}
+
+.project-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.summary {
+  margin: 0 0 1rem;
+  color: var(--ink-soft);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background-color: color-mix(in oklch, var(--tint) 14%, var(--surface));
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-top: auto;
+}
+
+/* The repo link: an outlined pill with the GitHub mark, like the header's */
+.repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.45rem 1rem 0.45rem 0.85rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.repo::before {
+  content: "";
+  width: 1.05em;
+  height: 1.05em;
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.repo::after {
+  content: "→";
+  transition: translate 0.2s;
+}
+
+.repo:hover {
+  border-color: oklch(from var(--color-accent) calc(l + 0.08) c h);
+  background-color: oklch(from var(--color-accent) calc(l + 0.08) c h);
+}
+
+.repo:hover::after {
+  translate: 3px 0;
+}
+
+.repo:focus-visible,
+.more:focus-visible,
+.field-links a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.more {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--link);
+}
+
+.more::after {
+  content: " ↗";
+}
+
+.more:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 45rem) {
+  body.projects-page > main {
+    padding-inline: 1rem;
+  }
+
+  .projects-intro {
+    padding-top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .art img,
+  .repo::after {
+    transition: none;
+  }
+
+  .project-card:hover,
+  .project-card:focus-within,
+  .project-card:hover .art img,
+  .project-card:focus-within .art img {
+    translate: none;
+  }
+}
