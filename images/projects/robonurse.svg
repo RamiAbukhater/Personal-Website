@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f4f1e8"/>
+<line x1="400" y1="160" x2="400" y2="125" stroke="#b8892b" stroke-width="4" stroke-opacity="1" stroke-linecap="round"/>
+<circle cx="400" cy="115" r="10" fill="#b8892b" stroke="#b8892b" stroke-width="0"/>
+<rect x="315" y="160" width="170" height="120" rx="22" fill="#fff" stroke="#1f4e8c" stroke-width="3.5" />
+<circle cx="365" cy="215" r="13" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0"/>
+<circle cx="435" cy="215" r="13" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0"/>
+<path d="M375 250 Q400 266 425 250" fill="none" stroke="#1f4e8c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="340" y="292" width="120" height="90" rx="12" fill="#fff" stroke="#1f4e8c" stroke-width="3.5" />
+<path d="M400 317 v40 M380 337 h40" fill="none" stroke="#b8892b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="362" cy="395" r="13" fill="#fff" stroke="#1f4e8c" stroke-width="3.5"/>
+<circle cx="438" cy="395" r="13" fill="#fff" stroke="#1f4e8c" stroke-width="3.5"/>
+<rect x="50" y="105" width="210" height="72" rx="14" fill="#fff" stroke="#b8892b" stroke-width="3.5" />
+<text x="155" y="150" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#b8892b">symptoms</text>
+<path d="M225 177 L295 200 L190 177" fill="#fff" stroke="#b8892b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+<line x1="192" y1="177" x2="223" y2="177" stroke="#fff" stroke-width="5" stroke-opacity="1" stroke-linecap="round"/>
+<rect x="540" y="105" width="210" height="72" rx="14" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0" />
+<text x="645" y="150" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#fff">analysis</text>
+<path d="M575 177 L505 200 L610 177 Z" fill="#1f4e8c"/>
+<text x="155" y="405" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">Arduino</text>
+<text x="645" y="405" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">Raspberry Pi</text>
+<text x="645" y="440" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="24" fill="#1f4e8c">ChatGPT API</text>
+<text x="155" y="440" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="24" fill="#1f4e8c">C++ motion</text>
+</svg>

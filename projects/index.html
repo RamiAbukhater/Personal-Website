@@ -15,20 +15,32 @@
     </header>
 
     <!--
-      Projects live in lib/projects.json. projects.js sorts them into the field
-      sections below by their "field" and renders each as an illustrated card
+      Projects live in lib/projects.json. projects.js filters them by the pie
+      chart's year and the search box, sorts what is left into the field
+      sections below by their "field", and renders each as an illustrated card
       (island art drawn by projects/art/build-art.mjs). A project whose "repo"
       is null still needs its GitHub repo URL; its card links to the profile
       until then.
     -->
     <main>
       <section class="projects-intro">
-        <p class="eyebrow">Things I have built and studied</p>
-        <h1 class="projects-title">Projects</h1>
-        <p class="lede">
-          Research, robots, and the tools in between. Each little island stands
-          for one project; follow it to the code on GitHub.
-        </p>
+        <div class="intro-text">
+          <p class="eyebrow">Things I have built and studied</p>
+          <h1 class="projects-title">Projects</h1>
+          <p class="lede">
+            Research, robots, and the tools in between. Each little island stands
+            for one project; follow it to the code on GitHub. Click a slice or a
+            year to filter by year, search to narrow further, or do both.
+          </p>
+        </div>
+
+        <div class="container">
+          <svg id="projects-pie-plot" viewBox="-50 -50 100 100" role="img" aria-label="Pie chart of projects per year"></svg>
+          <ul class="legend"></ul>
+        </div>
+
+        <input class="searchBar" type="search" aria-label="Search projects" placeholder="🔍 Search projects…" />
+
         <ul class="field-links" aria-label="Jump to a field">
           <li><a href="#minds" style="--tint: #e0aa45">Minds &amp; Machines</a></li>
           <li><a href="#robotics" style="--tint: #cc7650">Robotics &amp; Embodied AI</a></li>
@@ -36,6 +48,8 @@
           <li><a href="#tools" style="--tint: #7f9452">Data &amp; Web Tools</a></li>
         </ul>
       </section>
+
+      <p class="projects-empty" id="no-matches" hidden>No projects match that search.</p>
 
       <section class="field" id="minds" aria-labelledby="minds-title" style="--tint: #e0aa45">
         <header>

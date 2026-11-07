@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f4f1e8"/>
+<text x="95" y="130" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">M</text>
+<text x="157" y="130" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">T</text>
+<text x="219" y="130" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">W</text>
+<text x="281" y="130" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">T</text>
+<text x="343" y="130" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">F</text>
+<rect x="66" y="150" width="54" height="54" rx="8" fill="#b8892b" stroke="#b8892b" stroke-width="3" fill-opacity="0.75"/>
+<rect x="66" y="212" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<rect x="66" y="274" width="54" height="54" rx="8" fill="#b8892b" stroke="#b8892b" stroke-width="3" fill-opacity="0.75"/>
+<rect x="128" y="150" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<rect x="128" y="212" width="54" height="54" rx="8" fill="#b8892b" stroke="#b8892b" stroke-width="3" fill-opacity="0.75"/>
+<rect x="128" y="274" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<rect x="190" y="150" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<rect x="190" y="212" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<rect x="190" y="274" width="54" height="54" rx="8" fill="#b8892b" stroke="#b8892b" stroke-width="3" fill-opacity="0.75"/>
+<rect x="252" y="150" width="54" height="54" rx="8" fill="#b8892b" stroke="#b8892b" stroke-width="3" fill-opacity="0.75"/>
+<rect x="252" y="212" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<rect x="252" y="274" width="54" height="54" rx="8" fill="#b8892b" stroke="#b8892b" stroke-width="3" fill-opacity="0.75"/>
+<rect x="314" y="150" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<rect x="314" y="212" width="54" height="54" rx="8" fill="#b8892b" stroke="#b8892b" stroke-width="3" fill-opacity="0.75"/>
+<rect x="314" y="274" width="54" height="54" rx="8" fill="#fff" stroke="#b8892b" stroke-width="3" />
+<text x="219" y="395" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#b8892b">weekly menu</text>
+<rect x="470" y="105" width="260" height="70" rx="12" fill="#fff" stroke="#1f4e8c" stroke-width="3.5" />
+<text x="600" y="150" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#1f4e8c">React</text>
+<rect x="470" y="210" width="260" height="70" rx="12" fill="#fff" stroke="#1f4e8c" stroke-width="3.5" />
+<text x="600" y="255" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#1f4e8c">Spring Boot</text>
+<rect x="470" y="315" width="260" height="70" rx="12" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="3.5" />
+<text x="600" y="360" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#fff">MariaDB</text>
+<path d="M600 181 v24 m-9 -9 l9 9 l9 -9 M600 181 m-9 9 l9 -9 l9 9" fill="none" stroke="#1b2a41" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.5"/>
+<path d="M600 286 v24 m-9 -9 l9 9 l9 -9 M600 286 m-9 9 l9 -9 l9 9" fill="none" stroke="#1b2a41" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.5"/>
+</svg>

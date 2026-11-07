@@ -172,6 +172,7 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2', 
     }
 
     const article = document.createElement('article');
+    article.className = 'card';
 
     // Bullet points when the project has them, otherwise the one-line description
     let details = project.bullets?.length
@@ -179,13 +180,13 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2', 
       : `<p>${project.description ?? ''}</p>`;
 
     article.innerHTML = `
-      <${headingLevel}>${project.title}</${headingLevel}>
       <img src="${sitePath(project.image ?? 'https://dsc106.com/labs/lab02/images/empty.svg')}" alt="${project.alt ?? project.title}" />
       <div>
-        <p><time datetime="${project.year}">${project.date ?? project.year}</time></p>
-        ${project.stack ? `<p>${project.stack}</p>` : ''}
+        <p class="card-meta"><time datetime="${project.year}">${project.date ?? project.year}</time></p>
+        <${headingLevel}>${project.title}</${headingLevel}>
+        ${project.stack ? `<p class="card-stack">${project.stack}</p>` : ''}
         ${details}
-        ${project.url ? `<p><a href="${sitePath(project.url)}" target="_blank">${project.linkText ?? 'Learn more'}</a></p>` : ''}
+        ${project.url ? `<a href="${sitePath(project.url)}" target="_blank">${project.linkText ?? 'Learn more'} →</a>` : ''}
       </div>
     `;
 
@@ -193,7 +194,7 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2', 
   }
 }
 
-// One illustrated card: island art, status line, title, summary, tags, and links.
+// One illustrated card: island art (project.art, else project.image), status line, title, summary, tags, and links.
 // repo: a URL, null while the repo link is still to be added, or false for no GitHub link.
 function projectCard(project, headingLevel) {
   const article = document.createElement('article');
@@ -217,7 +218,7 @@ function projectCard(project, headingLevel) {
 
   article.innerHTML = `
     <div class="art">
-      <img src="${sitePath(project.image ?? 'https://dsc106.com/labs/lab02/images/empty.svg')}" width="400" height="250" alt="${project.alt ?? ''}" loading="lazy" />
+      <img src="${sitePath(project.art ?? project.image ?? 'https://dsc106.com/labs/lab02/images/empty.svg')}" width="400" height="250" alt="${project.artAlt ?? project.alt ?? ''}" loading="lazy" />
     </div>
     <div class="body">
       <p class="meta">${status}${project.meta ? ` <span>${project.meta}</span>` : ''}</p>

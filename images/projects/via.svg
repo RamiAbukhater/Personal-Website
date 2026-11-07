@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f4f1e8"/>
+<rect x="72" y="205" width="92" height="90" rx="10" fill="#fff" stroke="#1f4e8c" stroke-width="3.5" />
+<circle cx="118" cy="250" r="24" fill="#fff" stroke="#1f4e8c" stroke-width="3.5"/>
+<circle cx="118" cy="250" r="8" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0"/>
+<text x="118" y="345" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#1f4e8c">observe</text>
+<path d="M180 250 L232 250 m-11 -11 l11 11 l-11 11" fill="none" stroke="#1b2a41" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="250" y1="310" x2="490" y2="310" stroke="#1b2a41" stroke-width="3" stroke-opacity="0.4" stroke-linecap="round"/>
+<path d="M250 310 C320 310 330 130 370 130 C410 130 420 310 490 310" fill="#b8892b" stroke="#b8892b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill-opacity="0.16"/>
+<line x1="370" y1="130" x2="370" y2="310" stroke="#b8892b" stroke-width="3" stroke-opacity="1" stroke-linecap="round" stroke-dasharray="8 7"/>
+<text x="370" y="105" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">belief</text>
+<text x="370" y="360" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#b8892b">latent state</text>
+<path d="M508 250 L560 250 m-11 -11 l11 11 l-11 11" fill="none" stroke="#1b2a41" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="610" y="352" width="120" height="22" rx="6" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0" />
+<path d="M670 352 L625 245 L715 170" fill="none" stroke="#1f4e8c" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="670" cy="352" r="0" fill="#fff" stroke="#1f4e8c" stroke-width="3.5"/>
+<circle cx="625" cy="245" r="13" fill="#fff" stroke="#b8892b" stroke-width="3.5"/>
+<circle cx="715" cy="170" r="11" fill="#fff" stroke="#b8892b" stroke-width="3.5"/>
+<path d="M722 160 L762 142 M726 178 L766 178" fill="none" stroke="#1f4e8c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+<text x="670" y="415" text-anchor="middle" font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif" font-size="30" fill="#1f4e8c">act</text>
+<text x="76" y="462" text-anchor="start" font-family="ui-monospace, Consolas, monospace" font-size="26" fill="#b8892b">five PyTorch modules</text>
+</svg>

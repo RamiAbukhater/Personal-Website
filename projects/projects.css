@@ -39,8 +39,27 @@ body.projects-page > main {
 
 /* --- Intro --- */
 
+/* Text on the left, the projects-per-year pie on the right; search and field links span both */
 .projects-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 1.5rem 3rem;
   padding-block: 2.5rem 1rem;
+}
+
+.projects-intro .field-links {
+  grid-column: 1 / -1;
+}
+
+.projects-intro #projects-pie-plot {
+  max-width: 12em;
+}
+
+@media (max-width: 48rem) {
+  .projects-intro {
+    grid-template-columns: 1fr;
+  }
 }
 
 .eyebrow {
