@@ -231,6 +231,17 @@ body.projects-page > main {
   pointer-events: none;
 }
 
+/* Screenshots (rather than island SVGs) fill the frame and keep their real
+   colors at night */
+.art img[src$=".jpg"],
+.art img[src$=".png"] {
+  object-fit: cover;
+}
+
+.art:has(img[src$=".jpg"], img[src$=".png"])::after {
+  display: none;
+}
+
 /* The island drifts up a little when its card is pointed at */
 .project-card:hover .art img,
 .project-card:focus-within .art img {

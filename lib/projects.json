@@ -299,6 +299,36 @@
     "artAlt": "Three colored waste bins under a camera on a pole, one outlined in a detection box, beside a stack of database disks"
   },
   {
+    "title": "Bikewatching, Bluebikes Traffic Map",
+    "year": "2026",
+    "status": "past",
+    "date": "November 2026",
+    "image": "images/projects/bikewatching.jpg",
+    "alt": "A map of Boston and Cambridge with green bike lanes and Bluebikes stations drawn as circles, orange where more bikes arrive and blue where more leave, at 8:20 AM",
+    "stack": "JavaScript · Mapbox GL JS · D3",
+    "description": "An interactive map of Bluebikes traffic in Boston and Cambridge, filterable by time of day.",
+    "bullets": [
+      "Layered Boston and Cambridge bike-lane GeoJSON on a Mapbox map, with a D3 SVG overlay of 450+ Bluebikes stations kept in sync as the map pans and zooms.",
+      "Sized stations by traffic from 260,000+ March 2024 trips and colored them by departures vs. arrivals, with a time slider that shows the morning and evening commute flip."
+    ],
+    "url": "https://ramiabukhater.github.io/lab-7-DSC-106/",
+    "linkText": "Open the live map",
+    "moreText": "Live map",
+    "field": "tools",
+    "shortTitle": "Bikewatching",
+    "meta": "DSC 106",
+    "summary": "An interactive map of Bluebikes traffic in Boston and Cambridge: station size shows trips, color shows departures vs. arrivals, and a slider filters by time of day.",
+    "tags": [
+      "Mapbox GL JS",
+      "D3",
+      "Geospatial",
+      "Data visualization"
+    ],
+    "repo": "https://github.com/RamiAbukhater/lab-7-DSC-106",
+    "art": "images/projects/bikewatching.jpg",
+    "artAlt": "A map of Boston and Cambridge with green bike lanes and Bluebikes stations drawn as circles, orange where more bikes arrive and blue where more leave, at 8:20 AM"
+  },
+  {
     "title": "Menu Generator, Full-Stack Web App",
     "year": "2025",
     "status": "past",
